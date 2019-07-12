@@ -4,4 +4,4 @@
 *.vcf
 *.TXT
 *.txt
-private.php
+settings.php
