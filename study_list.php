@@ -7,17 +7,27 @@
 	//	v--- PHP -- 1A - END of startup
 	//****************************************************************************************************************
 	//****************************************************************************************************************
-	//	^--- PHP -- 1B - START of retrieving the studies
+	//	^--- PHP -- 1B - START of retrieving the assemblies
 	//****************************************************************************************************************
 	$objCollection = new stdClass();
+	$objCollection->sql = "SELECT * FROM tblAssemblies ORDER BY name DESC;";
+	$objCollection->prepare = $objSettings->database->connection->prepare($objCollection->sql);
+	$objCollection->prepare->execute();
+	$objCollection->assemblies = $objCollection->prepare->fetchAll(PDO::FETCH_ASSOC);
+	//****************************************************************************************************************
+	//	v--- PHP -- 1B - END of retrieving the assemblies
+	//****************************************************************************************************************
+	//****************************************************************************************************************
+	//	^--- PHP -- 1C - START of retrieving the studies
+	//****************************************************************************************************************
 	$objCollection->sql = "SELECT tblAssemblies.name AS assembly_name, tblStudies.id AS id, tblStudies.assembly_id AS assembly_id, tblStudies.name AS name, tblStudies.snp_count AS snp_count, tblStudies.cultivar_count AS cultivar_count  FROM tblAssemblies, tblStudies WHERE tblAssemblies.id = tblStudies.assembly_id ORDER BY name DESC;";
 	$objCollection->prepare = $objSettings->database->connection->prepare($objCollection->sql);
 	$objCollection->prepare->execute();
 	$objCollection->studies = $objCollection->prepare->fetchAll(PDO::FETCH_ASSOC);
 	//****************************************************************************************************************
-	//	v--- PHP -- 1B - END of retrieving the studies
+	//	v--- PHP -- 1C - END of retrieving the studies
 	//****************************************************************************************************************
-	//echo "The time is newly " . date("h:i:sa");
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -46,7 +56,25 @@
 		        <div class="row">
 					<h2>Studies</h2>
 					<p class="lead">Below is a list of every study that has been uploaded, parsed and saved to the database. Click on a study to view corresponding SNPs and Cultivars.</p>
-					<p class="lead"><a class="btn btn-success" href="study_upload.php" role="button">Upload Study</a></p>
+					<?php
+						//****************************************************************************************************************
+						//	^--- PHP -- 6A - START of check for no assemblies
+						//****************************************************************************************************************
+						if(empty($objCollection->assemblies)){
+							?>
+								<div class="alert alert-warning lead" role="alert">
+									You have not uploaded an assembly. Before uploading a study you must first <a href="assembly_upload.php">upload an assembly</a>.
+								</div>
+							<?php
+						}else{
+							?>
+								<p class="lead"><a class="btn btn-success" href="study_upload.php" role="button">Upload Study</a></p>
+							<?php
+						}
+						//****************************************************************************************************************
+						//	v--- PHP -- 6A - END of check for no assemblies
+						//****************************************************************************************************************
+					?>
 				</div>
 				<div class="row">
 					<table id="tblStudies" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
