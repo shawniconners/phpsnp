@@ -61,29 +61,36 @@
 					<p class="lead"><a class="btn btn-success" href="assembly_upload.php" role="button">Upload Assembly</a></p>
 				</div>
 				<div class="row">
-					<table id="tblAssemblies" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
-						<thead>
-							<tr>
-								<th>Assembly</th>
-								<th>Studies</th>
-								<th>Structures</th>
-								<th>Bases</th>
-							</tr>
-						</thead>
-						<tbody>
-							<?php
-								//****************************************************************************************************************
-								//	^--- PHP -- 8A - START of looping through assemblies
-								//****************************************************************************************************************
-								foreach ($objCollection->assemblies as $arrAssembly) {
-									echo "<tr><td><a href='assembly.php?assembly_id=".$arrAssembly["id"]."'>".$arrAssembly["name"]."</a></td><td>".$arrAssembly["study_count"]."</td><td>".number_format($arrAssembly["structure_count"])."</td><td>".number_format($arrAssembly["sequence_length"])."</td></tr>";
-								}
-								//****************************************************************************************************************
-								//	v--- PHP -- 8A - END of looping through assemblies
-								//****************************************************************************************************************
-							 ?>
-						</tbody>
-					</table>
+					<div class="card w-100 mt-3">
+						<div class="card-header text-white bg-secondary font-weight-bold">
+							Assemblies
+						</div>
+						<div class="card-body">
+							<table id="tblAssemblies" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>Studies</th>
+										<th>Structures</th>
+										<th>Bases</th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php
+										//****************************************************************************************************************
+										//	^--- PHP -- 8A - START of looping through assemblies
+										//****************************************************************************************************************
+										foreach ($objCollection->assemblies as $arrAssembly) {
+											echo "<tr><td><a href='assembly.php?assembly_id=".$arrAssembly["id"]."'>".$arrAssembly["name"]."</a></td><td>".$arrAssembly["study_count"]."</td><td>".number_format($arrAssembly["structure_count"])."</td><td>".number_format($arrAssembly["sequence_length"])."</td></tr>";
+										}
+										//****************************************************************************************************************
+										//	v--- PHP -- 8A - END of looping through assemblies
+										//****************************************************************************************************************
+									 ?>
+								</tbody>
+							</table>
+						</div>
+					</div>
 				</div>
 				<hr/>
 			</div> <!-- /container -->
