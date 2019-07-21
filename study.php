@@ -184,7 +184,7 @@
 							      		Cultivars
 							    	</div>
 							    	<div class="col-sm-10">
-							      		<?php echo $objStudy->cultivar_count; ?>
+							      		<?php echo number_format($objStudy->cultivar_count); ?>
 							    	</div>
 								</div>
 								<div class="row">
@@ -192,7 +192,7 @@
 							      		SNPs
 							    	</div>
 							    	<div class="col-sm-10">
-							      		<?php echo $objStudy->snp_count; ?>
+							      		<?php echo number_format($objStudy->snp_count); ?>
 							    	</div>
 								</div>
 							</div>
