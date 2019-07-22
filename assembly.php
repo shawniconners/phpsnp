@@ -90,6 +90,49 @@
 				<div class="row">
 					<div class="card w-100 mt-3">
 						<div class="card-header text-white bg-secondary font-weight-bold">
+							Overview
+						</div>
+						<div class="card-body">
+							<div class="container">
+								<div class="row">
+							    	<div class="col-sm-2 font-weight-bold">
+							      		Source
+							    	</div>
+							    	<div class="col-sm-10">
+							      		<a href="<?php echo $objAssembly->source; ?>"><?php echo $objAssembly->source; ?></a>
+							    	</div>
+								</div>
+								<div class="row">
+							    	<div class="col-sm-2 font-weight-bold">
+							      		Bases
+							    	</div>
+							    	<div class="col-sm-10">
+							      		<?php echo number_format($objAssembly->sequence_length); ?>
+							    	</div>
+								</div>
+								<div class="row">
+							    	<div class="col-sm-2 font-weight-bold">
+							      		Studies
+							    	</div>
+							    	<div class="col-sm-10">
+							      		<?php echo number_format(count($objAssembly->studies)); ?>
+							    	</div>
+								</div>
+								<div class="row">
+							    	<div class="col-sm-2 font-weight-bold">
+							      		Structures
+							    	</div>
+							    	<div class="col-sm-10">
+							      		<?php echo number_format(count($objAssembly->structures)); ?>
+							    	</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="card w-100 mt-4">
+						<div class="card-header text-white bg-secondary font-weight-bold">
 							Studies
 						</div>
 						<div class="card-body">
