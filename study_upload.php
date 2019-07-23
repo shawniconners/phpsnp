@@ -7,7 +7,15 @@
 	//	v--- PHP -- 1A - END of startup
 	//****************************************************************************************************************
 	//****************************************************************************************************************
-	//	^--- PHP -- 1B - START of retrieving the assemblies
+	//	^--- PHP -- 1B - START of receiving the id for the assembly
+	//****************************************************************************************************************
+	$objRequest = new stdClass();
+	$objRequest->assembly_id = filter_input(INPUT_GET, "assembly_id", FILTER_VALIDATE_INT);
+	//****************************************************************************************************************
+	//	v--- PHP -- 1B - END of receiving the id for the assembly
+	//****************************************************************************************************************
+	//****************************************************************************************************************
+	//	^--- PHP -- 1C - START of retrieving the assemblies
 	//****************************************************************************************************************
 	$objCollection = new stdClass();
 	$objCollection->sql = "SELECT * FROM tblAssemblies ORDER BY name DESC;";
@@ -15,7 +23,20 @@
 	$objCollection->prepare->execute();
 	$objCollection->assemblies = $objCollection->prepare->fetchAll(PDO::FETCH_ASSOC);
 	//****************************************************************************************************************
-	//	v--- PHP -- 1B - END of retrieving the assemblies
+	//	v--- PHP -- 1C - END of retrieving the assemblies
+	//****************************************************************************************************************
+	//****************************************************************************************************************
+	//	^--- PHP -- 1D - START of retrieving the select status for each assembly option
+	//****************************************************************************************************************
+	for ($intLoopCounter = 0; $intLoopCounter < count($objCollection->assemblies); $intLoopCounter++) {
+		if($objCollection->assemblies[$intLoopCounter]["id"] == $objRequest->assembly_id){
+			$objCollection->assemblies[$intLoopCounter]["select_status"] = " selected='selected'";
+		}else{
+			$objCollection->assemblies[$intLoopCounter]["select_status"] = "";
+		}
+	}
+	//****************************************************************************************************************
+	//	v--- PHP -- 1D - END of retrieving the select status for each assembly option
 	//****************************************************************************************************************
 ?>
 <!doctype html>
@@ -82,7 +103,7 @@
 										//	^--- PHP -- 10A - START of looping through assemblies
 										//****************************************************************************************************************
 										foreach ($objCollection->assemblies as $arrAssembly) {
-											echo "<option value='".$arrAssembly["id"]."'>".$arrAssembly["name"]."</option>";
+											echo "<option value='".$arrAssembly["id"]."'".$arrAssembly["select_status"].">".$arrAssembly["name"]."</option>";
 										}
 										//****************************************************************************************************************
 										//	v--- PHP -- 10A - END of looping through assemblies
