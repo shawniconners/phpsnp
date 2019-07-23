@@ -221,7 +221,7 @@
 												//****************************************************************************************************************
 												//	^--- PHP -- 10A - START of a structure with found SNPs within this study
 												//****************************************************************************************************************
-												echo "<tr><td><a href='structure.php?assembly_id=".$objStudy->assembly->id."&structure_id=".$arrStructure["id"]."&study_id=".$objStudy->id."'>".$arrStructure["name"]."</a></td><td>".number_format($arrStructure["snp_count"])."</td><td>".number_format($arrStructure["sequence_length"])."</td></tr>";
+												echo "<tr><td>".$arrStructure["name"]."</td><td>".number_format($arrStructure["snp_count"])."</td><td>".number_format($arrStructure["sequence_length"])."</td></tr>";
 												//****************************************************************************************************************
 												//	v--- PHP -- 10A - END of a structure with found SNPs within this study
 												//****************************************************************************************************************
