@@ -125,7 +125,7 @@
 				}else{
 					//console.log("All requests completed.");
 					elmAssemblyImportProgressPercent.innerHTML = "100% Complete. Redirecting..."
-					window.location.href = "assembly_list.php";
+					window.location.href = "curate.php";
 				}
 				//console.log("Loop has finished.");
 			}

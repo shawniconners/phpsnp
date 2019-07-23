@@ -127,7 +127,7 @@
 				}else{
 					//console.log("All requests completed.");
 					elmStudyCleanProgressPercent.innerHTML = "100% Complete. Redirecting..."
-					window.location.href = "study_list.php";
+					window.location.href = "assembly.php?assembly_id=<?php echo $objStudy->assembly_id; ?>";
 				}
 				//console.log("Loop has finished.");
 			}

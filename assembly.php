@@ -40,6 +40,19 @@
 	//****************************************************************************************************************
 	//	v--- PHP -- 1C - END of retrieving the assembly and related studies and structures
 	//****************************************************************************************************************
+	//****************************************************************************************************************
+	//	^--- PHP -- 1D - START of retrieving the error count for each study
+	//****************************************************************************************************************
+	for ($intLoopCounter = 0; $intLoopCounter < count($objAssembly->studies); $intLoopCounter++) {
+		$objAssembly->sql = "SELECT count(id) as error_count FROM tblErrors WHERE study_id = :study_id;";
+		$objAssembly->prepare = $objSettings->database->connection->prepare($objAssembly->sql);
+		$objAssembly->prepare->bindValue(':study_id', $objAssembly->studies[$intLoopCounter]["id"], PDO::PARAM_INT);
+		$objAssembly->prepare->execute();
+		$objAssembly->studies[$intLoopCounter]["error_count"] = $objAssembly->prepare->fetchAll(PDO::FETCH_ASSOC)[0]["error_count"];
+	}
+	//****************************************************************************************************************
+	//	v--- PHP -- 1D - END of retrieving the error count for each study
+	//****************************************************************************************************************
 ?>
 <!doctype html>
 <html lang="en">
@@ -80,7 +93,7 @@
 	      	<div class="container">
 		        <div class="row">
 					<h2><?php echo $objAssembly->name; ?></h2>
-					<p class="lead">Below is a list of every study and structure found in the <strong><?php echo $objAssembly->name; ?></strong> assembly. Click on a study or structure to view more information.</p>
+					<p class="lead">Below is a list of every study and structure found in the <strong><?php echo $objAssembly->name; ?></strong> assembly. Click on a study to view more information.</p>
 					<p class="lead">
 						<a id="elmAssemblyViewUploadStudy" class="btn btn-success" href="study_upload.php" role="button">Upload Study</a>
 						<a id="elmAssemblyViewDownload" class="btn btn-primary" href="assembly_download_script.php?id=<?php echo $objAssembly->id; ?>" role="button">Download Assembly</a>
@@ -142,6 +155,7 @@
 										<th>Name</th>
 										<th>Cultivars</th>
 										<th>SNPs</th>
+										<th>Errors</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -150,7 +164,7 @@
 										//	^--- PHP -- 8A - START of looping through studies
 										//****************************************************************************************************************
 										foreach ($objAssembly->studies as $arrStudy) {
-											echo "<tr><td><a href='study.php?assembly_id=".$objAssembly->id."&study_id=".$arrStudy["id"]."'>".$arrStudy["name"]."</a></td><td>".number_format($arrStudy["cultivar_count"])."</td><td>".number_format($arrStudy["snp_count"])."</td></tr>";
+											echo "<tr><td><a href='study.php?assembly_id=".$objAssembly->id."&study_id=".$arrStudy["id"]."'>".$arrStudy["name"]."</a></td><td>".number_format($arrStudy["cultivar_count"])."</td><td>".number_format($arrStudy["snp_count"])."</td><td>".number_format($arrStudy["error_count"])."</td></tr>";
 										}
 										//****************************************************************************************************************
 										//	v--- PHP -- 8A - END of looping through studies
@@ -180,7 +194,7 @@
 										//	^--- PHP -- 8B - START of looping through structures
 										//****************************************************************************************************************
 										foreach ($objAssembly->structures as $arrStructure) {
-											echo "<tr><td><a href='structure.php?assembly_id=".$objAssembly->id."&structure_id=".$arrStructure["id"]."'>".$arrStructure["name"]."</a></td><td>".number_format($arrStructure["sequence_length"])."</td></tr>";
+											echo "<tr><td>".$arrStructure["name"]."</td><td>".number_format($arrStructure["sequence_length"])."</td></tr>";
 										}
 										//****************************************************************************************************************
 										//	v--- PHP -- 8B - END of looping through structures
@@ -209,15 +223,16 @@
 					order: [[0, 'asc']],
 					columns: [
 						{ orderable: true, width: "40%" },
-						{ orderable: true, width: "30%" },
-						{ orderable: true, width: "30%" }
+						{ orderable: true, width: "20%" },
+						{ orderable: true, width: "20%" },
+						{ orderable: true, width: "20%" }
 					]
 				} );
 				$('#tblStructures').DataTable( {
 					order: [[0, 'asc']],
 					columns: [
-						{ orderable: true, width: "70%" },
-						{ orderable: true, width: "30%" }
+						{ orderable: true, width: "60%" },
+						{ orderable: true, width: "40%" }
 					]
 				} );
 			} );

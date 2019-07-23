@@ -10,7 +10,7 @@
 	//	^--- PHP -- 1B - START of creating the response
 	//****************************************************************************************************************
 	$objResponse = new stdClass();
-	$objResponse->redirect = "study_list.php";
+	$objResponse->redirect = "assembly.php?assembly_id=";
 	//****************************************************************************************************************
 	//	v--- PHP -- 1B - END of creating the response
 	//****************************************************************************************************************
@@ -28,11 +28,12 @@
 	$objStudy = new stdClass();
 	$objStudy->assembly = new stdClass();
 	$objStudy->id = $objRequest->id;
-	$objStudy->sql = "SELECT structures FROM tblStudies WHERE id = :id;";
+	$objStudy->sql = "SELECT assembly_id, structures FROM tblStudies WHERE id = :id;";
 	$objStudy->prepare = $objSettings->database->connection->prepare($objStudy->sql);
 	$objStudy->prepare->bindValue(':id', $objStudy->id, PDO::PARAM_INT);
 	$objStudy->prepare->execute();
 	$objStudy->database_record = $objStudy->prepare->fetchAll(PDO::FETCH_ASSOC)[0];
+	$objStudy->assembly->id = $objStudy->database_record["assembly_id"];
 	$objStudy->structures = json_decode($objStudy->database_record["structures"]);
 	$objStudy->structures_count = count($objStudy->structures);
 	//****************************************************************************************************************
@@ -79,7 +80,7 @@
 	//****************************************************************************************************************
 	//	^--- PHP -- 1I - START of redirect
 	//****************************************************************************************************************
-	header('Location: '.$objResponse->redirect);
+	header('Location: '.$objResponse->redirect.$objStudy->assembly->id);
 	//****************************************************************************************************************
 	//	v--- PHP -- 1I - END of redirect
 	//****************************************************************************************************************
