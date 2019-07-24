@@ -121,6 +121,7 @@
 				//console.log("Loop has finished.");
 			}
 		</script>
+		<link rel="stylesheet" href="styles.css">
   	</head>
 	<body onload="funStudyImportStart()">
 		<?php
@@ -138,10 +139,29 @@
 					<h2>Study - VCF to Database Import</h2>
 					<p class="lead">Your VCF field identification settings have been saved to the database. The SNPs within your study are now being imported into the database. SNPs are also being compared against the assigned assembly to ensure reference values are accurate.</p>
 		  		</div>
-				<div class="row">
+				<div class="row mt-2 mb-4">
+					<ul class="step d-flex flex-nowrap">
+						<li class="step-item">
+							<span class="">Step 1<br />Details and File Upload</span>
+					  	</li>
+						<li class="step-item">
+							<span class="">Step 2<br />Field Identification</span>
+						</li>
+						<li class="step-item">
+							<span class="">Step 3<br />Structure Tables Creation</span>
+						</li>
+						<li class="step-item active">
+							<span class="">Step 4<br />Databae Import</span>
+						</li>
+						<li class="step-item">
+							<span class="">Step 5<br />Cleaning Up</span>
+						</li>
+					</ul>
+				</div>
+				<div class="row justify-content-center">
 					<progress id="elmStudyImportProgress" value="0" max="1"></progress>
 				</div>
-				<div class="row">
+				<div class="row justify-content-center">
 					<h6 class="text-muted" id="elmStudyImportProgressPercent"></h6>
 				</div>
 				<hr/>

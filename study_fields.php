@@ -126,6 +126,7 @@
 				margin-top: 10px;
 			}
 		</style>
+		<link rel="stylesheet" href="styles.css">
   	</head>
 	<body>
 		<?php
@@ -143,6 +144,25 @@
 					<h2>Study - Field Identification</h2>
 					<p class="lead">Your Study has been uploaded to the server and a preliminary scan has been completed. Below is the first 20 fields of the header from your uploaded VCF. Please identify the Chromosome, Position, Name(s), Reference Allele, Alternate Allele and First Cultivar fields. When you are finished identifying fields, please click the Save and Continue button below.</p>
 		  		</div>
+				<div class="row mt-2 mb-4">
+					<ul class="step d-flex flex-nowrap">
+						<li class="step-item">
+							<span class="">Step 1<br />Details and File Upload</span>
+					  	</li>
+						<li class="step-item active">
+							<span class="">Step 2<br />Field Identification</span>
+						</li>
+						<li class="step-item">
+							<span class="">Step 3<br />Structure Tables Creation</span>
+						</li>
+						<li class="step-item">
+							<span class="">Step 4<br />Databae Import</span>
+						</li>
+						<li class="step-item">
+							<span class="">Step 5<br />Cleaning Up</span>
+						</li>
+					</ul>
+				</div>
 				<div class="row">
 					<table id="tblStudyFields" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
 						<thead>

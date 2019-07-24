@@ -130,6 +130,7 @@
 				//console.log("Loop has finished.");
 			}
 		</script>
+		<link rel="stylesheet" href="styles.css">
   	</head>
 	<body onload="funAssemblyImportStart()">
 		<?php
@@ -147,10 +148,20 @@
 					<h2>Assembly - Import</h2>
 					<p class="lead">Your assembly has been uploaded to the server and a preliminary scan has been completed. Assembly structure sequences are being imported into the database.</p>
 		  		</div>
-				<div class="row">
+				<div class="row mt-2 mb-4">
+					<ul class="step d-flex flex-nowrap">
+						<li class="step-item">
+							<span class="">Step 1<br />Details and File Upload</span>
+					  	</li>
+						<li class="step-item active">
+							<span class="">Step 2<br />Database Import</span>
+						</li>
+					</ul>
+				</div>
+				<div class="row justify-content-center">
 					<progress id="elmAssemblyImportProgress" value="0" max="1"></progress>
 				</div>
-				<div class="row">
+				<div class="row justify-content-center">
 					<h6 class="text-muted" id="elmAssemblyImportProgressPercent"></h6>
 				</div>
 				<hr/>

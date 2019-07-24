@@ -128,6 +128,7 @@
 				//console.log("Loop has finished.");
 			}
 		</script>
+		<link rel="stylesheet" href="styles.css">
   	</head>
 	<body onload="funStudyStructuresStart()">
 		<?php
@@ -145,10 +146,29 @@
 					<h2>Study - Structure Tables Creation</h2>
 					<p class="lead">Your VCF field identification settings have been saved to the database. Database tables are now being created to store all SNP information found within your study.</p>
 		  		</div>
-				<div class="row">
+				<div class="row mt-2 mb-4">
+					<ul class="step d-flex flex-nowrap">
+						<li class="step-item">
+							<span class="">Step 1<br />Details and File Upload</span>
+					  	</li>
+						<li class="step-item">
+							<span class="">Step 2<br />Field Identification</span>
+						</li>
+						<li class="step-item active">
+							<span class="">Step 3<br />Structure Tables Creation</span>
+						</li>
+						<li class="step-item">
+							<span class="">Step 4<br />Databae Import</span>
+						</li>
+						<li class="step-item">
+							<span class="">Step 5<br />Cleaning Up</span>
+						</li>
+					</ul>
+				</div>
+				<div class="row justify-content-center">
 					<progress id="elmStudyStructuresProgress" value="0" max="1"></progress>
 				</div>
-				<div class="row">
+				<div class="row justify-content-center">
 					<h6 class="text-muted" id="elmStudyStructuresProgressPercent"></h6>
 				</div>
 				<hr/>

@@ -25,6 +25,7 @@
 				return true;
 			}
 		</script>
+		<link rel="stylesheet" href="styles.css">
   	</head>
 	<body>
 		<?php
@@ -42,6 +43,16 @@
 					<h2>Assembly - Upload</h2>
 					<p class="lead">It takes a few steps to upload a new assembly. To start the process, fill out the form below and select a properly formatted FASTA file. The file you select must end with '.fasta' or it will be rejected. When you are ready, click the start button below to begin processing your new assembly.</p>
 		  		</div>
+				<div class="row mt-2 mb-4">
+					<ul class="step d-flex flex-nowrap">
+						<li class="step-item active">
+							<span class="">Step 1<br />Details and File Upload</span>
+					  	</li>
+						<li class="step-item">
+							<span class="">Step 2<br />Database Import</span>
+						</li>
+					</ul>
+				</div>
 				<div class="row">
 					<form action="assembly_upload_script.php" method="post" id="elmAssemblyUploadForm" name="elmAssemblyUploadForm"  enctype="multipart/form-data" onsubmit="return funAssemblyUploadSubmit();">
 						<div class="form-group row">

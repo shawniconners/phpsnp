@@ -57,6 +57,7 @@
 				return true;
 			}
 		</script>
+		<link rel="stylesheet" href="styles.css">
   	</head>
 	<body>
 		<?php
@@ -72,8 +73,27 @@
 	      	<div class="container">
 		        <div class="row">
 					<h2>Study - Upload</h2>
-					<p class="lead">It takes a few steps to upload a new Study. To start the process, fill out the form below and select a properly formatted VCF file. The file you select must end with '.vcf' or it will be rejected. When you are ready, click the start button below to begin processing your new Study.</p>
+					<p class="lead">It takes a few steps to upload a new Study. To start the process, fill out the form below and select a properly formatted VCF file. The file you select must end with '.vcf' or it will be rejected. When you are ready, click the upload study button below to begin processing your new Study.</p>
 		  		</div>
+				<div class="row mt-2 mb-4">
+					<ul class="step d-flex flex-nowrap">
+						<li class="step-item active">
+							<span class="">Step 1<br />Details and File Upload</span>
+					  	</li>
+						<li class="step-item">
+							<span class="">Step 2<br />Field Identification</span>
+						</li>
+						<li class="step-item">
+							<span class="">Step 3<br />Structure Tables Creation</span>
+						</li>
+						<li class="step-item">
+							<span class="">Step 4<br />Databae Import</span>
+						</li>
+						<li class="step-item">
+							<span class="">Step 5<br />Cleaning Up</span>
+						</li>
+					</ul>
+				</div>
 				<div class="row">
 					<form action="study_upload_script.php" method="post" id="elmStudyUploadForm" name="elmStudyUploadForm"  enctype="multipart/form-data" onsubmit="return funStudyUploadSubmit();">
 						<div class="form-group row">
