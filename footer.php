@@ -1,4 +1,8 @@
-
+<div class="container">
+	<div class="row float-right">
+		<small>Created with <a href="https://www.phpsnp.com">phpSNP</a>, an <a href="https://github.com/shawniconners/phpsnp">open-source</a> project.</small>
+	</div>
+</div>
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
