@@ -62,7 +62,9 @@
     	<title>phpSNP - Study - VCF to Database Import</title>
     	<!-- Bootstrap core CSS -->
     	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+		<script src="scripts.js"></script>
 		<script>
+			var boolConsoleLogging = <?php echo $objSettings->console_logging; ?>;
 			var objCoreRequests = <?php echo json_encode($objCoreRequests); ?>;
 			objCoreRequests.interval = <?php echo $objSettings->loop_interval; ?>;
 			objCoreRequests.requests_completed = 0;
@@ -70,7 +72,7 @@
 				funLoop();
 			}
 			function funLoop(){
-				//console.log("Loop has started.");
+				funConsoleLog("Loop has started.");
 				for(intCoreCounter = 0; intCoreCounter < objCoreRequests.cores.length; intCoreCounter++){
 					if(objCoreRequests.cores[intCoreCounter].status === "ready"){
 						// at least one core is ready, we need to check to see if a request is also ready
@@ -83,7 +85,7 @@
 								objCoreRequests.cores[intCoreCounter].ajax = new XMLHttpRequest();
 								objCoreRequests.cores[intCoreCounter].ajax.open("GET", location.protocol+"//"+objCoreRequests.cores[intCoreCounter].server+"/"+objCoreRequests.requests[intRequestCounter].url+"&core="+intCoreCounter.toString(), true);
 								objCoreRequests.cores[intCoreCounter].ajax.send();
-								//console.log("Active and Requested: Core Key " + intCoreCounter + " with Request Key " + objCoreRequests.cores[intCoreCounter].request_key);
+								funConsoleLog("Active and Requested: Core Key " + intCoreCounter + " with Request Key " + objCoreRequests.cores[intCoreCounter].request_key);
 								break;
 							}
 						}
@@ -91,13 +93,13 @@
 						// this core is active and we need to check to see if a response has been received
 						if(objCoreRequests.cores[intCoreCounter].ajax.readyState === 4 && objCoreRequests.cores[intCoreCounter].ajax.status === 200){
 							//a response from a request has been received, mark the request as complete and set the core to ready
-							//console.log("Response Complete: Core Key " + intCoreCounter + " with Request Key " + objCoreRequests.cores[intCoreCounter].request_key);
+							funConsoleLog("Response Complete: Core Key " + intCoreCounter + " with Request Key " + objCoreRequests.cores[intCoreCounter].request_key);
 							objCoreRequests.requests_completed++;
 							objCoreRequests.requests[objCoreRequests.cores[intCoreCounter].request_key].status = "complete";
 							objCoreRequests.cores[intCoreCounter].status = "ready";
 							if(objCoreRequests.cores[intCoreCounter].ajax.responseText > ""){
-								console.log("Error: http://"+objCoreRequests.cores[intCoreCounter].server+"/"+objCoreRequests.requests[intRequestCounter].url+"&core="+intCoreCounter.toString());
-								console.log(objCoreRequests.cores[intCoreCounter].ajax.responseText);
+								funConsoleLog("Error: http://"+objCoreRequests.cores[intCoreCounter].server+"/"+objCoreRequests.requests[intRequestCounter].url+"&core="+intCoreCounter.toString());
+								funConsoleLog(objCoreRequests.cores[intCoreCounter].ajax.responseText);
 							}
 						}
 					}
@@ -105,16 +107,16 @@
 				elmStudyImportProgress = document.getElementById("elmStudyImportProgress");
 				elmStudyImportProgressPercent = document.getElementById("elmStudyImportProgressPercent");
 				if(objCoreRequests.requests_completed < objCoreRequests.requests.length){
-					//console.log("Waiting for requests to complete. Relooping requested.");
+					funConsoleLog("Waiting for requests to complete. Relooping requested.");
 					elmStudyImportProgress.value = objCoreRequests.requests_completed / objCoreRequests.requests.length;
 					elmStudyImportProgressPercent.innerHTML = parseInt(elmStudyImportProgress.value * 100) + "% Complete"
 					setTimeout(function(){funLoop();}, objCoreRequests.interval);
 				}else{
-					//console.log("All requests completed.");
+					funConsoleLog("All requests completed.");
 					elmStudyImportProgressPercent.innerHTML = "100% Complete. Redirecting..."
 					window.location.href = "study_clean.php?id=<?php echo $objStudy->id; ?>";
 				}
-				//console.log("Loop has finished.");
+				funConsoleLog("Loop has finished.");
 			}
 		</script>
 		<link rel="stylesheet" href="styles.css">

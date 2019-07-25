@@ -5,6 +5,7 @@
 	$objSettings = new stdClass();
 	$objSettings->snp_chunk_size = 200; // lines of SNPs per ajax request
 	$objSettings->loop_interval = 10; // milliseconds between ajax loops
+	$objSettings->console_logging = "false"; // turn console logging on or off
 	$objSettings->insert_batch_size = 20; // number of snps per insert
 	$objSettings->core = 0; // current core being used for this request
 	$objSettings->webservers = [ // note, number of webservers should match the number of database connections in the pool

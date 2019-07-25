@@ -5,3 +5,9 @@ function funValidURL(inc_url) {
 		return false;
 	}
 }
+
+function funConsoleLog(inc_message){
+	if(boolConsoleLogging){
+		console.log(inc_message);
+	}
+}
