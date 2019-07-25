@@ -60,21 +60,17 @@
 	//	v--- PHP -- 1F - END of looping through study structures and deleting SNP tables
 	//****************************************************************************************************************
 	//****************************************************************************************************************
-	//	^--- PHP -- 1G - START of looping through studies and deleting cultivars, errors and files
+	//	^--- PHP -- 1G - START of looping through studies and deleting errors and files
 	//****************************************************************************************************************
 	foreach ($objAssembly->studies as $arrStudy) {
 		$objAssembly->sql = "DELETE FROM tblErrors WHERE study_id = :study_id;";
 		$objAssembly->prepare = $objSettings->database->connection->prepare($objAssembly->sql);
 		$objAssembly->prepare->bindValue(':study_id', $arrStudy["id"], PDO::PARAM_INT);
 		$objAssembly->prepare->execute();
-		$objAssembly->sql = "DELETE FROM tblCultivars WHERE study_id = :study_id;";
-		$objAssembly->prepare = $objSettings->database->connection->prepare($objAssembly->sql);
-		$objAssembly->prepare->bindValue(':study_id', $arrStudy["id"], PDO::PARAM_INT);
-		$objAssembly->prepare->execute();
 		unlink("study_uploads/".$arrStudy["id"].".vcf");
 	}
 	//****************************************************************************************************************
-	//	v--- PHP -- 1G - END of looping through studies and deleting cultivars, errors and files
+	//	v--- PHP -- 1G - END of looping through studies and deleting errors and files
 	//****************************************************************************************************************
 	//****************************************************************************************************************
 	//	^--- PHP -- 1H - START of deleting the assembly and related structures
