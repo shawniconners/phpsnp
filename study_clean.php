@@ -76,7 +76,6 @@
 			var objCoreRequests = <?php echo json_encode($objCoreRequests); ?>;
 			objCoreRequests.interval = <?php echo $objSettings->loop_interval; ?>;
 			objCoreRequests.requests_completed = 0;
-			//alert(objCoreRequests);
 			function funStudyCleanStart(){
 				funLoop();
 			}

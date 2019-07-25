@@ -34,6 +34,6 @@
 	$objStudy->prepare = $objSettings->database->connection->prepare($objStudy->sql);
 	$objStudy->prepare->execute();
 	//****************************************************************************************************************
-	//	v--- PHP -- 1C - END of finding the chunk and coversion to array of relevant values
+	//	v--- PHP -- 1C - END of creating the table
 	//****************************************************************************************************************
 ?>

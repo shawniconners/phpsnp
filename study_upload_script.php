@@ -166,11 +166,10 @@
 	//	v--- PHP -- 1G - END of updating the database to include meta data, header and chunk information
 	//****************************************************************************************************************
 	//****************************************************************************************************************
-	//	^--- PHP -- 1H - START of redirect to assemblies list
+	//	^--- PHP -- 1H - START of redirect to study fields page
 	//****************************************************************************************************************
-	//echo "will be redirecting to: ".$objResponse->redirect.$objStudy->id." after ".$objStudy->snp_count." SNPs.";
 	header('Location: '.$objResponse->redirect.$objStudy->id);
 	//****************************************************************************************************************
-	//	v--- PHP -- 1H - END of moving uploaded VCF to uploads folder
+	//	v--- PHP -- 1H - END of redirect to study fields page
 	//****************************************************************************************************************
 ?>

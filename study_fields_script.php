@@ -64,11 +64,10 @@
 	//	v--- PHP -- 1F - END of updating cultivar_count and cultivars for the study record
 	//****************************************************************************************************************
 	//****************************************************************************************************************
-	//	^--- PHP -- 1G - START of redirect to study assembly
+	//	^--- PHP -- 1G - START of redirect to study structures page
 	//****************************************************************************************************************
-	//echo "will be redirecting to: ".$objResponse->redirect.$objStudy->id." after ".$objStudy->snp_count." SNPs.";
 	header('Location: '.$objResponse->redirect.$objStudy->id);
 	//****************************************************************************************************************
-	//	v--- PHP -- 1G - END of redirect to study assembly
+	//	v--- PHP -- 1G - END of redirect to study structures page
 	//****************************************************************************************************************
 ?>

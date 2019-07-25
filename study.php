@@ -141,7 +141,7 @@
 						<a id="elmStudyViewCultivars" class="btn btn-info" href="study_cultivars_script.php?id=<?php echo $objStudy->id; ?>" role="button">Download Cultivar List</a>
 						<?php
 							//****************************************************************************************************************
-							//	^--- PHP -- 7B - START of VCF error detection
+							//	^--- PHP -- 7A - START of VCF error detection
 							//****************************************************************************************************************
 							if($objStudy->error_count > 0){
 								//****************************************************************************************************************
@@ -153,7 +153,7 @@
 								//****************************************************************************************************************
 							}
 							//****************************************************************************************************************
-							//	v--- PHP -- 7B - END of VCF error detection
+							//	v--- PHP -- 7A - END of VCF error detection
 							//****************************************************************************************************************
 						?>
 						<button id="elmStudyViewRemove" class="btn btn-danger" onclick="funStudyRemoveVerify()">Remove Study</button>
@@ -209,21 +209,21 @@
 								<tbody>
 									<?php
 										//****************************************************************************************************************
-										//	^--- PHP -- 8B - START of looping through structures and looking for structures with SNPs
+										//	^--- PHP -- 10A - START of looping through structures and looking for structures with SNPs
 										//****************************************************************************************************************
 										foreach ($objStudy->assembly->structures as $arrStructure) {
 											if($arrStructure["snp_count"] > 0){
 												//****************************************************************************************************************
-												//	^--- PHP -- 10A - START of a structure with found SNPs within this study
+												//	^--- PHP -- 12A - START of a structure with found SNPs within this study
 												//****************************************************************************************************************
 												echo "<tr><td>".$arrStructure["name"]."</td><td>".number_format($arrStructure["snp_count"])."</td><td>".number_format($arrStructure["sequence_length"])."</td></tr>";
 												//****************************************************************************************************************
-												//	v--- PHP -- 10A - END of a structure with found SNPs within this study
+												//	v--- PHP -- 12A - END of a structure with found SNPs within this study
 												//****************************************************************************************************************
 											}
 										}
 										//****************************************************************************************************************
-										//	v--- PHP -- 8B - END of looping through structures and looking for structures with SNPs
+										//	v--- PHP -- 10A - END of looping through structures and looking for structures with SNPs
 										//****************************************************************************************************************
 									 ?>
 								</tbody>

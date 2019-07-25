@@ -51,7 +51,6 @@
 	//	^--- PHP -- 1E - START of looping through SNPs from chunk and creating clean array
 	//****************************************************************************************************************
 	foreach ($objStudy->vcf_lines as $objStudy->current_vcf_line) {
-		//array_push($objStudy->snps, array_splice($objStudy->current_snp, 0, $objStudy->vcf_fields->first_cultivar));
 		array_push($objStudy->snps, explode("\t", trim($objStudy->current_vcf_line)));
 	}
 	unset($objStudy->vcf_lines);
@@ -93,12 +92,6 @@
 				$objSNP->prepare->execute();
 				$objStudy->batch = [];
 			}
-
-
-
-
-
-
 			$objStructure->id = 0;
 			$objStructure->name = "";
 			$objStructure->sequence = "";
@@ -109,11 +102,7 @@
 			$objNewStructure->prepare->bindValue(':assembly_id', $objStudy->assembly_id, PDO::PARAM_INT);
 			$objNewStructure->prepare->bindValue(':name', funStructureNameConversion($objStudy->current_snp[$objStudy->vcf_fields->chromosome-1]), PDO::PARAM_STR);
 			$objNewStructure->prepare->execute();
-			//echo "Line: '".$objStudy->current_line_number."' assembly_id: '".$objStudy->assembly_id."' name: '".funStructureNameConversion($objStudy->current_snp[$objStudy->vcf_fields->chromosome-1])."'<br />";
-			//print_r($objNewStructure->prepare->fetchAll(PDO::FETCH_ASSOC));
-			//echo "<br />";
 			if($objNewStructure->prepare->rowCount() === 0){
-			//if(empty($objNewStructure->prepare->fetchAll(PDO::FETCH_ASSOC))){
 				$objError->line_number = $objStudy->current_line_number;
 				$objError->category = "Invalid Structure";
 				$objError->assembly_reference = "";
@@ -235,16 +224,6 @@
 			//**********************************************************************************************************************************
 			// END BATCH CODE FIX - add this item to the current batch, see if it is ready to send, if so, do it, and reset the batch
 			//**********************************************************************************************************************************
-			/*
-			$objSNP->sql = "INSERT INTO tblStudy".$objSNP->study_id."Structure".$objStructure->id."SNPs (position, names, reference, alternate, results) VALUES (:position, :names, :reference, :alternate, :results);";
-			$objSNP->prepare = $objSettings->database->connection->prepare($objSNP->sql);
-			$objSNP->prepare->bindValue(':position', $objSNP->position, PDO::PARAM_INT);
-			$objSNP->prepare->bindValue(':names', json_encode($objSNP->names), PDO::PARAM_STR);
-			$objSNP->prepare->bindValue(':reference', $objSNP->reference, PDO::PARAM_STR);
-			$objSNP->prepare->bindValue(':alternate', json_encode($objSNP->alternate), PDO::PARAM_STR);
-			$objSNP->prepare->bindValue(':results', json_encode($objSNP->results), PDO::PARAM_STR);
-			$objSNP->prepare->execute();
-			*/
 			//****************************************************************************************************************
 			//	v--- PHP -- 3C - END of a valid SNP to be added to appropriate table
 			//****************************************************************************************************************
@@ -252,7 +231,6 @@
 			//****************************************************************************************************************
 			//	^--- PHP -- 3D - START of an erroneous SNP that needs to be added to the errors table
 			//****************************************************************************************************************
-			//echo "ERROR - Invalid SNP<br />";
 			$objError->sql = "INSERT INTO tblErrors (study_id, line_number, category, assembly_reference, snp_chromosome, snp_position, snp_reference, snp_alternate) VALUES (:study_id, :line_number, :category, :assembly_reference, :snp_chromosome, :snp_position, :snp_reference, :snp_alternate);";
 			$objError->prepare = $objSettings->database->connection->prepare($objError->sql);
 			$objError->prepare->bindValue(':study_id', $objStudy->id, PDO::PARAM_INT);
@@ -264,7 +242,6 @@
 			$objError->prepare->bindValue(':snp_reference', $objError->snp_reference, PDO::PARAM_STR);
 			$objError->prepare->bindValue(':snp_alternate', $objError->snp_alternate, PDO::PARAM_STR);
 			$objError->prepare->execute();
-
 			//****************************************************************************************************************
 			//	v--- PHP -- 3D - END of an erroneous SNP that needs to be added to the errors table
 			//****************************************************************************************************************
@@ -293,10 +270,6 @@
 		$objSNP->prepare->execute();
 		$objStudy->batch = [];
 	}
-	//unset($objSNP);
-	//unset($objError);
-	//unset($objStudy);
-	//unset($objStructure);
 	//****************************************************************************************************************
 	//	^--- PHP -- 1F - END of looping through all the SNPs in this chunk
 	//****************************************************************************************************************

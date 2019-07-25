@@ -81,11 +81,11 @@
 			//****************************************************************************************************************
 		}else{
 			//****************************************************************************************************************
-			//	^--- PHP -- 3A - START of a line of sequence
+			//	^--- PHP -- 3B - START of a line of sequence
 			//****************************************************************************************************************
 			$objFASTA->sequence_length += strlen(trim($objFASTA->file_current_line));
 			//****************************************************************************************************************
-			//	v--- PHP -- 3A - END of a line of sequence
+			//	v--- PHP -- 3B - END of a line of sequence
 			//****************************************************************************************************************
 		}
         $objFASTA->character_count += strlen($objFASTA->file_current_line);
@@ -130,45 +130,10 @@
 	//	v--- PHP -- 1H - END of updating the assembly record for sequence_length
 	//****************************************************************************************************************
 	//****************************************************************************************************************
-	//	^--- PHP -- 1I - START of retrieving all the new structures
-	//****************************************************************************************************************
-	/*
-	$objAssembly->sql = "SELECT id FROM tblStructures WHERE assembly_id = :assembly_id;";
-	$objAssembly->prepare = $objSettings->database->connection->prepare($objAssembly->sql);
-	$objAssembly->prepare->bindValue(':assembly_id', $objAssembly->id, PDO::PARAM_INT);
-	$objAssembly->prepare->execute();
-	$objAssembly->structures = $objAssembly->prepare->fetchAll(PDO::FETCH_ASSOC);
-	*/
-	//****************************************************************************************************************
-	//	v--- PHP -- 1I - END of retrieving all the new structures
-	//****************************************************************************************************************
-	//****************************************************************************************************************
-	//	^--- PHP -- 1J - START of looping through structures and creating SNP tables
-	//****************************************************************************************************************
-	/*
-	foreach ($objAssembly->structures as $arrStructure) {
-		$objStructure->sql =  "CREATE TABLE tblStructure".$arrStructure["id"]."SNPs (";
-  		$objStructure->sql .= "id int(11) unsigned NOT NULL AUTO_INCREMENT, ";
-  		$objStructure->sql .= "study_id int(11) DEFAULT NULL, ";
-  		$objStructure->sql .= "position int(11) DEFAULT NULL, ";
-  		$objStructure->sql .= "names json DEFAULT NULL, ";
-  		$objStructure->sql .= "reference char(1) DEFAULT NULL, ";
-  		$objStructure->sql .= "alternate json DEFAULT NULL, ";
-  		$objStructure->sql .= "results json DEFAULT NULL, ";
-  		$objStructure->sql .= "PRIMARY KEY (id) ";
-		$objStructure->sql .= ") ENGINE=InnoDB DEFAULT CHARSET=latin1;";
-		$objStructure->prepare = $objSettings->database->connection->prepare($objStructure->sql);
-		$objStructure->prepare->execute();
-	}
-	*/
-	//****************************************************************************************************************
-	//	v--- PHP -- 1J - END of looping through structures and creating SNP tables
-	//****************************************************************************************************************
-	//****************************************************************************************************************
-	//	^--- PHP -- 1K - START of redirect to assemblies list
+	//	^--- PHP -- 1I - START of redirect to assembly import page
 	//****************************************************************************************************************
 	header('Location: '.$objResponse->redirect.$objAssembly->id);
 	//****************************************************************************************************************
-	//	v--- PHP -- 1K - END of redirect to assemblies list
+	//	v--- PHP -- 1I - END of redirect to assembly import page
 	//****************************************************************************************************************
 ?>

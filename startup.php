@@ -7,7 +7,7 @@
 	//	v--- PHP -- 1A - END of settings
 	//****************************************************************************************************************
 	//****************************************************************************************************************
-	//	^--- 1B - START of choosing database connection
+	//	^--- PHP -- 1B - START of choosing database connection
 	//****************************************************************************************************************
 	if(isset($_POST["core"])){
 		$objSettings->core = filter_input(INPUT_POST, "core", FILTER_VALIDATE_INT);
@@ -19,10 +19,10 @@
 	$objSettings->database->password = $objSettings->database->pool[$objSettings->core]["password"];
 	$objSettings->database->connection = new PDO('mysql:host='.$objSettings->database->host.';dbname='.$objSettings->database->name,$objSettings->database->user, $objSettings->database->password);
 	//****************************************************************************************************************
-	//	v--- 1B - END of choosing database connection
+	//	^--- PHP -- 1B - END of choosing database connection
 	//****************************************************************************************************************
 	//****************************************************************************************************************
-	//	^--- 1C - START of shared functions
+	//	^--- PHP -- 1C - START of shared functions
 	//****************************************************************************************************************
 	function funStructureNameConversion($inc_structure_name){
 		$inc_structure_name = str_replace("Chr", "Gm", $inc_structure_name);
@@ -35,6 +35,6 @@
 		return $inc_structure_name;
 	}
 	//****************************************************************************************************************
-	//	v--- 1C - END of shared functions
+	//	^--- PHP -- 1C - END of shared functions
 	//****************************************************************************************************************
 ?>
