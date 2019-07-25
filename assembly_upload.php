@@ -17,12 +17,19 @@
     	<title>phpSNP - Assembly - Upload</title>
     	<!-- Bootstrap core CSS -->
     	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+		<script src="scripts.js"></script>
 		<script>
 			function funAssemblyUploadSubmit(){
-				elmAssemblyUploadSubmitButton = document.getElementById("elmAssemblyUploadSubmitButton");
-				elmAssemblyUploadSubmitButton.innerHTML = "Please wait. Assembly is uploading...";
-				elmAssemblyUploadSubmitButton.disabled = true;
-				return true;
+				elmAssemblyUploadSourceValue = document.getElementById("elmAssemblyUploadSourceValue");
+				if(funValidURL(elmAssemblyUploadSourceValue.value)){
+					elmAssemblyUploadSubmitButton = document.getElementById("elmAssemblyUploadSubmitButton");
+					elmAssemblyUploadSubmitButton.innerHTML = "Please wait. Assembly is uploading...";
+					elmAssemblyUploadSubmitButton.disabled = true;
+					return true;
+				}else{
+					alert("Please provide a valid URL for your Source field.");
+					return false;
+				}
 			}
 		</script>
 		<link rel="stylesheet" href="styles.css">
