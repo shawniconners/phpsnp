@@ -135,7 +135,7 @@
 	      	<div class="container">
 		        <div class="row">
 					<h2><?php echo $objStudy->name; ?></h2>
-					<p class="lead">Below is an overview of the <strong><?php echo $objStudy->name; ?></strong> study, along with a list of structures where SNPs were found in the <strong><?php echo $objStudy->assembly->name; ?></strong> assembly. Click on a structure to view SNP and cultivar details.</p>
+					<p class="lead">Below is an overview of the <strong><?php echo $objStudy->name; ?></strong> study, along with a list of structures where SNPs were found in the <strong><?php echo $objStudy->assembly->name; ?></strong> assembly.</p>
 					<p class="lead">
 						<a id="elmStudyViewDownload" class="btn btn-success" href="study_download_script.php?id=<?php echo $objStudy->id; ?>" role="button">Download Study</a>
 						<a id="elmStudyViewCultivars" class="btn btn-info" href="study_cultivars_script.php?id=<?php echo $objStudy->id; ?>" role="button">Download Cultivar List</a>
