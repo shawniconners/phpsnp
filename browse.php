@@ -274,14 +274,14 @@ exit;
 						?>
 							<div class="card mt-3">
 								<div class="card-header text-white bg-secondary font-weight-bold">
-									Study - <?php echo $arrStudy["name"];?>
+									<?php echo $arrStudy["name"];?>
 								</div>
 								<div class="card-body">
 									<div class="row">
 										<div class="col-2">
-											<h1 class="mb-0" id="elmBrowseSNPCountStudy<?php echo $arrStudy["id"];?>"></h1>
+											<h3 class="mb-0" id="elmBrowseSNPCountStudy<?php echo $arrStudy["id"];?>"></h3>
 											<small>SNPs</small>
-											<h1 class="mb-0 mt-2"><?php echo $arrStudy["cultivar_count"];?></h1>
+											<h3 class="mb-0 mt-2"><?php echo number_format($arrStudy["cultivar_count"]);?></h3>
 											<small>Cultivars</small>
 										</div>
 										<div id="elmBrowseDensityStudy<?php echo $arrStudy["id"];?>" class="col-10"></div>
