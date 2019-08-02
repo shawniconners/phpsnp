@@ -320,7 +320,7 @@ exit;
 					intElemWidth<?php echo $arrStudy["id"];?> = parseInt(strCSSWidthprop<?php echo $arrStudy["id"];?>.substring(0, strCSSWidthprop<?php echo $arrStudy["id"];?>.length - 2));
 
 					// set the dimensions and margins of the graph
-					var margin<?php echo $arrStudy["id"];?> = {top: 10, right: 40, bottom: 20, left: 30},
+					var margin<?php echo $arrStudy["id"];?> = {top: 10, right: 30, bottom: 20, left: 20},
 						width<?php echo $arrStudy["id"];?> = intElemWidth<?php echo $arrStudy["id"];?> - margin<?php echo $arrStudy["id"];?>.left - margin<?php echo $arrStudy["id"];?>.right,
 						height<?php echo $arrStudy["id"];?> = 150 - margin<?php echo $arrStudy["id"];?>.top - margin<?php echo $arrStudy["id"];?>.bottom;
 
