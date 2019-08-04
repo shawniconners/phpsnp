@@ -260,12 +260,20 @@ exit;
 						</div>
 					</div>
 				</div>
-				<div class="row">
-					<div class="col-3">
-
-					</div>
-
-				</div>
+				<ul class="nav nav-tabs mt-3">
+					<li class="nav-item">
+				    	<a class="nav-link active" href="#">Density</a>
+				  	</li>
+				  	<li class="nav-item">
+				    	<a class="nav-link" href="#">Matrix</a>
+				  	</li>
+				  	<li class="nav-item">
+				    	<a class="nav-link" href="#">Haplotypes</a>
+				  	</li>
+					<li class="nav-item">
+				    	<a class="nav-link" href="#">Similarity</a>
+				  	</li>
+				</ul>
 				<?php
 					//****************************************************************************************************************
 					//	^--- PHP -- 5A - START of looping through studies and creating a row for each
@@ -279,10 +287,10 @@ exit;
 								<div class="card-body">
 									<div class="row">
 										<div class="col-2">
-											<h3 class="mb-0" id="elmBrowseSNPCountStudy<?php echo $arrStudy["id"];?>"></h3>
-											<small>SNPs</small>
+											<h3 class="mb-0 mt-0" id="elmBrowseSNPCountStudy<?php echo $arrStudy["id"];?>"></h3>
+											<small class="mb-0 mt-0">SNPs</small>
 											<h3 class="mb-0 mt-2"><?php echo number_format($arrStudy["cultivar_count"]);?></h3>
-											<small>Cultivars</small>
+											<small class="mb-0 mt-0">Cultivars</small>
 										</div>
 										<div id="elmBrowseDensityStudy<?php echo $arrStudy["id"];?>" class="col-10"></div>
 									</div>
@@ -320,7 +328,7 @@ exit;
 					intElemWidth<?php echo $arrStudy["id"];?> = parseInt(strCSSWidthprop<?php echo $arrStudy["id"];?>.substring(0, strCSSWidthprop<?php echo $arrStudy["id"];?>.length - 2));
 
 					// set the dimensions and margins of the graph
-					var margin<?php echo $arrStudy["id"];?> = {top: 10, right: 30, bottom: 20, left: 60},
+					var margin<?php echo $arrStudy["id"];?> = {top: 10, right: 40, bottom: 20, left: 40},
 						width<?php echo $arrStudy["id"];?> = intElemWidth<?php echo $arrStudy["id"];?> - margin<?php echo $arrStudy["id"];?>.left - margin<?php echo $arrStudy["id"];?>.right,
 						height<?php echo $arrStudy["id"];?> = 150 - margin<?php echo $arrStudy["id"];?>.top - margin<?php echo $arrStudy["id"];?>.bottom;
 
