@@ -190,7 +190,7 @@ exit;
 	      	<div class="container">
 		        <div class="row">
 					<h2>Browse</h2>
-					<p class="lead">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+					<p class="lead">The following is a breakdown of SNP density from your uploaded studies. Change the assembly, structure and region by using the dropdowns and fields below. Additional views and research options are available by clicking the explore button within each study.</p>
 				</div>
 				<div class="row">
 					<div class="col-3">
@@ -260,20 +260,6 @@ exit;
 						</div>
 					</div>
 				</div>
-				<ul class="nav nav-tabs mt-3">
-					<li class="nav-item">
-				    	<a class="nav-link active" href="#">Density</a>
-				  	</li>
-				  	<li class="nav-item">
-				    	<a class="nav-link" href="#">Matrix</a>
-				  	</li>
-				  	<li class="nav-item">
-				    	<a class="nav-link" href="#">Haplotypes</a>
-				  	</li>
-					<li class="nav-item">
-				    	<a class="nav-link" href="#">Similarity</a>
-				  	</li>
-				</ul>
 				<?php
 					//****************************************************************************************************************
 					//	^--- PHP -- 5A - START of looping through studies and creating a row for each
@@ -287,10 +273,19 @@ exit;
 								<div class="card-body">
 									<div class="row">
 										<div class="col-2">
-											<h3 class="mb-0 mt-0" id="elmBrowseSNPCountStudy<?php echo $arrStudy["id"];?>"></h3>
+											<h4 class="mb-0 mt-0" id="elmBrowseSNPCountStudy<?php echo $arrStudy["id"];?>"></h4>
 											<small class="mb-0 mt-0">SNPs</small>
-											<h3 class="mb-0 mt-2"><?php echo number_format($arrStudy["cultivar_count"]);?></h3>
-											<small class="mb-0 mt-0">Cultivars</small>
+											<h4 class="mb-0 mt-2"><?php echo number_format($arrStudy["cultivar_count"]);?></h4>
+											<small class="mb-0 mt-0">Cultivars</small><br />
+											<div class="btn-group mt-3 ml-0" role="group">
+											    <button id="btnGroupDrop1" type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+											      Explore
+											    </button>
+											    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+											      <a class="dropdown-item" href="#">Dropdown link</a>
+											      <a class="dropdown-item" href="#">Dropdown link</a>
+											    </div>
+											</div>
 										</div>
 										<div id="elmBrowseDensityStudy<?php echo $arrStudy["id"];?>" class="col-10"></div>
 									</div>
