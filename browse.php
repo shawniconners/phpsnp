@@ -142,13 +142,6 @@
 	//****************************************************************************************************************
 	//	v--- PHP -- 1J - END of determining the selected (or default) stop position
 	//****************************************************************************************************************
-/*
-echo "<pre>";
-echo $objCollection->assemblies[$objCollection->selected->assembly->index]["structures"][$objCollection->selected->structure->index]["sequence_length"];
-print_r($objCollection);
-echo "</pre>";
-exit;
-*/
 ?>
 <!doctype html>
 <html lang="en">
@@ -337,8 +330,7 @@ exit;
 							  "translate(" + margin<?php echo $arrStudy["id"];?>.left + "," + margin<?php echo $arrStudy["id"];?>.top + ")");
 
 					// get the data
-					//d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/1_OneNum.csv", function(data) {
-					d3.json("snp_positions.php?study_id=<?php echo $arrStudy["id"];?>&structure_id=<?php echo $objCollection->selected->structure->id; ?>&start_position=<?php echo $objCollection->selected->start->position; ?>&stop_position=<?php echo $objCollection->selected->stop->position; ?>", function(data) {
+					d3.json("snp_positions_script.php?study_id=<?php echo $arrStudy["id"];?>&structure_id=<?php echo $objCollection->selected->structure->id; ?>&start_position=<?php echo $objCollection->selected->start->position; ?>&stop_position=<?php echo $objCollection->selected->stop->position; ?>", function(data) {
 
 					  // X axis: scale and draw:
 					  var x<?php echo $arrStudy["id"];?> = d3.scaleLinear()
