@@ -98,12 +98,16 @@
 		$objCore->server = $objSettings->webservers[$intCoreCounter];
 		array_push($objCoreRequests->cores, $objCore);
 	}
-	for($intLoopCounter = 0; $intLoopCounter < (count($objAssembly->study->cultivars)-1); $intLoopCounter++){
+	//for($intLoopCounter = 0; $intLoopCounter < (count($objAssembly->study->cultivars)-1); $intLoopCounter++){
+	//for($intLoopCounter = 10000; $intLoopCounter < 10010; $intLoopCounter++){
+	//for($intLoopCounter = (count($objAssembly->study->cultivars)-1); $intLoopCounter > 19000 ; $intLoopCounter--){
+	for($intLoopCounter = 10500; $intLoopCounter > 10000 ; $intLoopCounter--){
 		$objRequest = new stdClass();
 		$objRequest->status = "ready"; // options: ready, active, complete
 		$objRequest->url = "cultivar_similarity_script.php?study_id=".$objAssembly->study->id."&structure_id=".$objAssembly->structure->id."&start_position=".$objAssembly->structure->start_position."&stop_position=".$objAssembly->structure->stop_position."&cultivar_key=".$intLoopCounter."&cultivar_count=".$objAssembly->study->cultivar_count;
 		array_push($objCoreRequests->requests, $objRequest);
 	}
+	//print_r($objCoreRequests);
 	//****************************************************************************************************************
 	//	v--- PHP -- 1G - END of converting the cultivars to core requests
 	//****************************************************************************************************************
