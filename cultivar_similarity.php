@@ -227,15 +227,15 @@
 							<small class="mb-0 mt-0">Assembly</small>
 							<h4 class="mb-0 mt-2"><?php echo $objAssembly->structure->name;?></h4>
 							<small class="mb-0 mt-0">Structure</small>
-							<h4 class="mb-0 mt-2"><?php echo $objAssembly->structure->start_position;?></h4>
+							<h4 class="mb-0 mt-2"><?php echo number_format($objAssembly->structure->start_position);?></h4>
 							<small class="mb-0 mt-0">Start</small>
-							<h4 class="mb-0 mt-2"><?php echo $objAssembly->structure->stop_position;?></h4>
+							<h4 class="mb-0 mt-2"><?php echo number_format($objAssembly->structure->stop_position);?></h4>
 							<small class="mb-0 mt-0">Stop</small>
 							<h4 class="mb-0 mt-2"><?php echo $objAssembly->study->name;?></h4>
 							<small class="mb-0 mt-0">Study</small>
-							<h4 class="mb-0 mt-2"><?php echo $objAssembly->study->cultivar_count;?></h4>
+							<h4 class="mb-0 mt-2"><?php echo number_format($objAssembly->study->cultivar_count);?></h4>
 							<small class="mb-0 mt-0">Cultivars</small>
-							<h4 class="mb-0 mt-2"><?php echo $objAssembly->study->snp_count;?></h4>
+							<h4 class="mb-0 mt-2"><?php echo number_format($objAssembly->study->snp_count);?></h4>
 							<small class="mb-0 mt-0">SNPs</small>
 						</div>
 					</div>
@@ -291,7 +291,7 @@
 				// set the dimensions and margins of the graph
 				var margin = {top: 10, right: 20, bottom: 20, left: 40},
 					width = intElemWidth - margin.left - margin.right,
-					height = 200 - margin.top - margin.bottom;
+					height = 800 - margin.top - margin.bottom;
 
 				// append the svg object to the body of the page
 				var svg = d3.select("#elmCultivarSimilarityGraph")
