@@ -15,6 +15,7 @@
 	$objRequest->start_position = filter_input(INPUT_GET, "start_position", FILTER_VALIDATE_INT);
 	$objRequest->stop_position = filter_input(INPUT_GET, "stop_position", FILTER_VALIDATE_INT);
 	$objRequest->study_id = filter_input(INPUT_GET, "study_id", FILTER_VALIDATE_INT);
+	$objRequest->cultivar_key = filter_input(INPUT_GET, "cultivar_key", FILTER_VALIDATE_INT);
 	//****************************************************************************************************************
 	//	v--- PHP -- 1B - END of receiving the id for the assembly, structure and study, along with start and stop
 	//****************************************************************************************************************
@@ -29,6 +30,7 @@
 	$objAssembly->structure->stop_position = $objRequest->stop_position;
 	$objAssembly->study = new stdClass();
 	$objAssembly->study->id = $objRequest->study_id;
+	$objAssembly->study->cultivar_key = $objRequest->cultivar_key;
 	//****************************************************************************************************************
 	//	v--- PHP -- 1C - END of preparing selections
 	//****************************************************************************************************************
@@ -86,7 +88,16 @@
 	//	v--- PHP -- 1F - END of retrieving the snp count
 	//****************************************************************************************************************
 	//****************************************************************************************************************
-	//	^--- PHP -- 1G - START of converting the cultivars to core requests
+	//	^--- PHP -- 1G - START of determing the cultivar key 1
+	//****************************************************************************************************************
+	if(empty($objAssembly->study->cultivar_key)){
+		$objAssembly->study->cultivar_key = 0;
+	}
+	//****************************************************************************************************************
+	//	v--- PHP -- 1G - END of retrieving the cultivar key 1
+	//****************************************************************************************************************
+	//****************************************************************************************************************
+	//	^--- PHP -- 1H - START of converting the cultivars to core requests
 	//****************************************************************************************************************
 	$objCoreRequests = new stdClass();
 	$objCoreRequests->cores = [];
@@ -98,18 +109,20 @@
 		$objCore->server = $objSettings->webservers[$intCoreCounter];
 		array_push($objCoreRequests->cores, $objCore);
 	}
-	//for($intLoopCounter = 0; $intLoopCounter < (count($objAssembly->study->cultivars)-1); $intLoopCounter++){
+	for($intLoopCounter = 0; $intLoopCounter < count($objAssembly->study->cultivars); $intLoopCounter++){
 	//for($intLoopCounter = 10000; $intLoopCounter < 10010; $intLoopCounter++){
 	//for($intLoopCounter = (count($objAssembly->study->cultivars)-1); $intLoopCounter > 19000 ; $intLoopCounter--){
-	for($intLoopCounter = 10500; $intLoopCounter > 10000 ; $intLoopCounter--){
-		$objRequest = new stdClass();
-		$objRequest->status = "ready"; // options: ready, active, complete
-		$objRequest->url = "cultivar_similarity_script.php?study_id=".$objAssembly->study->id."&structure_id=".$objAssembly->structure->id."&start_position=".$objAssembly->structure->start_position."&stop_position=".$objAssembly->structure->stop_position."&cultivar_key=".$intLoopCounter."&cultivar_count=".$objAssembly->study->cultivar_count;
-		array_push($objCoreRequests->requests, $objRequest);
+	//for($intLoopCounter = 10500; $intLoopCounter > 10000 ; $intLoopCounter--){
+		if($intLoopCounter != $objAssembly->study->cultivar_key){
+			$objRequest = new stdClass();
+			$objRequest->status = "ready"; // options: ready, active, complete
+			$objRequest->url = "cultivar_similarity_script.php?study_id=".$objAssembly->study->id."&structure_id=".$objAssembly->structure->id."&start_position=".$objAssembly->structure->start_position."&stop_position=".$objAssembly->structure->stop_position."&cultivar_key_1=".$objAssembly->study->cultivar_key."&cultivar_key_2=".$intLoopCounter;
+			array_push($objCoreRequests->requests, $objRequest);
+		}
 	}
-	//print_r($objCoreRequests);
+
 	//****************************************************************************************************************
-	//	v--- PHP -- 1G - END of converting the cultivars to core requests
+	//	v--- PHP -- 1H - END of converting the cultivars to core requests
 	//****************************************************************************************************************
 ?>
 <!doctype html>
@@ -128,6 +141,7 @@
 		<script>
 			var boolConsoleLogging = <?php echo $objSettings->console_logging; ?>;
 			var objCoreRequests = <?php echo json_encode($objCoreRequests); ?>;
+			var arrData = [];
 			objCoreRequests.interval = <?php echo $objSettings->loop_interval; ?>;
 			objCoreRequests.requests_completed = 0;
 			function funCultivarSimilarityStart(){
@@ -155,6 +169,7 @@
 						// this core is active and we need to check to see if a response has been received
 						if(objCoreRequests.cores[intCoreCounter].ajax.readyState === 4 && objCoreRequests.cores[intCoreCounter].ajax.status === 200){
 							//a response from a request has been received, mark the request as complete and set the core to ready
+							arrData.push(JSON.parse(objCoreRequests.cores[intCoreCounter].ajax.responseText));
 							funConsoleLog("Response Complete: Core Key " + intCoreCounter + " with Request Key " + objCoreRequests.cores[intCoreCounter].request_key);
 							objCoreRequests.requests_completed++;
 							objCoreRequests.requests[objCoreRequests.cores[intCoreCounter].request_key].status = "complete";
@@ -173,10 +188,12 @@
 					funConsoleLog("All requests completed.");
 					elmCultivarSimilarityProgressPercent.innerHTML = "100% Complete. Redirecting..."
 					//window.location.href = "curate.php";
+					funCreateGraph();
 				}
 				funConsoleLog("Loop has finished.");
 			}
 		</script>
+		<script src="https://d3js.org/d3.v4.js"></script>
 	</head>
 	<body onload="funCultivarSimilarityStart()">
 		<?php
@@ -217,12 +234,15 @@
 							Cultivar Similarity
 						</div>
 						<div class="card-body">
-							<div class="row justify-content-center">
-								<progress id="elmCultivarSimilarityProgress" value="0" max="1"></progress>
+							<div id="elmCultivarSimilarityProgressContainer">
+								<div class="row justify-content-center">
+									<progress id="elmCultivarSimilarityProgress" value="0" max="1"></progress>
+								</div>
+								<div class="row justify-content-center">
+									<h6 class="text-muted" id="elmCultivarSimilarityProgressPercent"></h6>
+								</div>
 							</div>
-							<div class="row justify-content-center">
-								<h6 class="text-muted" id="elmCultivarSimilarityProgressPercent"></h6>
-							</div>
+							<div id="elmCultivarSimilarityProgressGraph"></div>
 						</div>
 					</div>
 				</div>
@@ -239,5 +259,67 @@
 			//	v--- PHP -- 3B - END of footer
 			//****************************************************************************************************************
 		?>
+		<script>
+
+
+			function funCreateGraph(){
+				var elmCultivarSimilarityProgressGraph = document.getElementById("elmCultivarSimilarityProgressGraph");
+				var strCSSWidthprop = window.getComputedStyle(elmCultivarSimilarityProgressGraph, null).getPropertyValue("width");
+				intElemWidth = parseInt(strCSSWidthprop.substring(0, strCSSWidthprop.length - 2));
+
+				// set the dimensions and margins of the graph
+				var margin = {top: 10, right: 40, bottom: 20, left: 40},
+					width = intElemWidth - margin.left - margin.right,
+					height = 500 - margin.top - margin.bottom;
+
+				// append the svg object to the body of the page
+				var svg = d3.select("#elmCultivarSimilarityProgressGraph")
+				  .append("svg")
+					.attr("width", width + margin.left + margin.right)
+					.attr("height", height + margin.top + margin.bottom)
+				  .append("g")
+					.attr("transform",
+						  "translate(" + margin.left + "," + margin.top + ")");
+
+				  // X axis: scale and draw:
+				  var x = d3.scaleLinear()
+					  .domain([0, <?php echo $objAssembly->study->snp_count; ?>])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
+					  .range([0, width]);
+				  svg.append("g")
+					  .attr("transform", "translate(0," + height + ")")
+					  .call(d3.axisBottom(x));
+
+				  // set the parameters for the histogram
+				  var histogram = d3.histogram()
+					  .value(function(d) { return d.similarity; })   // I need to give the vector of value
+					  .domain(x.domain())  // then the domain of the graphic
+					  .thresholds(x.ticks(100)); // then the numbers of bins
+
+				  // And apply this function to data to get the bins
+				  var bins = histogram(arrData);
+
+				  // Y axis: scale and draw:
+				  var y = d3.scaleLinear()
+					  .range([height, 0]);
+					  y.domain([0, d3.max(bins, function(d) { return d.length; })]);   // d3.hist has to be called before the Y axis obviously
+				  svg.append("g")
+					  .call(d3.axisLeft(y));
+
+				  // append the bar rectangles to the svg element
+				  svg.selectAll("rect")
+					  .data(bins)
+					  .enter()
+					  .append("rect")
+						.attr("x", 1)
+						.attr("transform", function(d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; })
+						.attr("width", function(d) { return x(d.x1) - x(d.x0) - 1 ; })
+						.attr("height", function(d) { return height - y(d.length); })
+						.style("fill", "#69b3a2");
+
+						//document.getElementById("elmBrowseSNPCountStudy").innerHTML = data.length.toLocaleString();
+
+			}
+
+		</script>
 	</body>
 </html>
