@@ -113,12 +113,12 @@
 	//for($intLoopCounter = 10000; $intLoopCounter < 10010; $intLoopCounter++){
 	//for($intLoopCounter = (count($objAssembly->study->cultivars)-1); $intLoopCounter > 19000 ; $intLoopCounter--){
 	//for($intLoopCounter = 10500; $intLoopCounter > 10000 ; $intLoopCounter--){
-		if($intLoopCounter != $objAssembly->study->cultivar_key){
+		//if($intLoopCounter != $objAssembly->study->cultivar_key){
 			$objRequest = new stdClass();
 			$objRequest->status = "ready"; // options: ready, active, complete
 			$objRequest->url = "cultivar_similarity_script.php?study_id=".$objAssembly->study->id."&structure_id=".$objAssembly->structure->id."&start_position=".$objAssembly->structure->start_position."&stop_position=".$objAssembly->structure->stop_position."&cultivar_key_1=".$objAssembly->study->cultivar_key."&cultivar_key_2=".$intLoopCounter;
 			array_push($objCoreRequests->requests, $objRequest);
-		}
+		//}
 	}
 
 	//****************************************************************************************************************
@@ -186,7 +186,11 @@
 					setTimeout(function(){funLoop();}, objCoreRequests.interval);
 				}else{
 					funConsoleLog("All requests completed.");
-					elmCultivarSimilarityProgressPercent.innerHTML = "100% Complete. Redirecting..."
+					elmCultivarSimilarityProgressPercent.innerHTML = "100% Complete. Displaying data..."
+					document.getElementById("elmCultivarSimilarityProgressContainer").style.visibility = "hidden";
+					document.getElementById("elmCultivarSimilarityProgressContainer").style.display = "none";
+					document.getElementById("elmCultivarSimilarityResultsContainer").style.visibility = "visible";
+					document.getElementById("elmCultivarSimilarityResultsContainer").style.display = "block";
 					//window.location.href = "curate.php";
 					funCreateGraph();
 				}
@@ -194,6 +198,12 @@
 			}
 		</script>
 		<script src="https://d3js.org/d3.v4.js"></script>
+		<style>
+			#elmCultivarSimilarityResultsContainer{
+				visibility: hidden;
+				display: none;
+			}
+		</style>
 	</head>
 	<body onload="funCultivarSimilarityStart()">
 		<?php
@@ -242,7 +252,15 @@
 									<h6 class="text-muted" id="elmCultivarSimilarityProgressPercent"></h6>
 								</div>
 							</div>
-							<div id="elmCultivarSimilarityProgressGraph"></div>
+							<div id="elmCultivarSimilarityResultsContainer">
+								<p>
+									The following is a histogram of SNP similarity percentages (x-axis) and number of cultivars (y-axis) for the previsiusly selected region of this study.
+								</p>
+								<p>
+									Reference cultivar used for this data: <strong><?php echo $objAssembly->study->cultivars[$objAssembly->study->cultivar_key]; ?></strong>.
+								</p>
+								<div id="elmCultivarSimilarityGraph"></div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -263,17 +281,20 @@
 
 
 			function funCreateGraph(){
-				var elmCultivarSimilarityProgressGraph = document.getElementById("elmCultivarSimilarityProgressGraph");
-				var strCSSWidthprop = window.getComputedStyle(elmCultivarSimilarityProgressGraph, null).getPropertyValue("width");
+
+
+				//document.write(JSON.stringify(arrData));
+				var elmCultivarSimilarityGraph = document.getElementById("elmCultivarSimilarityGraph");
+				var strCSSWidthprop = window.getComputedStyle(elmCultivarSimilarityGraph, null).getPropertyValue("width");
 				intElemWidth = parseInt(strCSSWidthprop.substring(0, strCSSWidthprop.length - 2));
 
 				// set the dimensions and margins of the graph
-				var margin = {top: 10, right: 40, bottom: 20, left: 40},
+				var margin = {top: 10, right: 20, bottom: 20, left: 40},
 					width = intElemWidth - margin.left - margin.right,
-					height = 500 - margin.top - margin.bottom;
+					height = 200 - margin.top - margin.bottom;
 
 				// append the svg object to the body of the page
-				var svg = d3.select("#elmCultivarSimilarityProgressGraph")
+				var svg = d3.select("#elmCultivarSimilarityGraph")
 				  .append("svg")
 					.attr("width", width + margin.left + margin.right)
 					.attr("height", height + margin.top + margin.bottom)
@@ -283,7 +304,8 @@
 
 				  // X axis: scale and draw:
 				  var x = d3.scaleLinear()
-					  .domain([0, <?php echo $objAssembly->study->snp_count; ?>])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
+				  	  //.domain([0, <?php echo $objAssembly->study->snp_count; ?>])
+					  .domain([0, 101])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
 					  .range([0, width]);
 				  svg.append("g")
 					  .attr("transform", "translate(0," + height + ")")
@@ -315,6 +337,7 @@
 						.attr("width", function(d) { return x(d.x1) - x(d.x0) - 1 ; })
 						.attr("height", function(d) { return height - y(d.length); })
 						.style("fill", "#69b3a2");
+
 
 						//document.getElementById("elmBrowseSNPCountStudy").innerHTML = data.length.toLocaleString();
 

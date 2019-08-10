@@ -334,7 +334,7 @@
 
 					  // X axis: scale and draw:
 					  var x<?php echo $arrStudy["id"];?> = d3.scaleLinear()
-						  .domain([<?php echo $objCollection->selected->start->position; ?>, <?php echo $objCollection->selected->stop->position; ?>])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
+						  .domain([<?php echo $objCollection->selected->start->position; ?>, <?php echo $objCollection->selected->stop->position; ?>+1])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
 						  .range([0, width<?php echo $arrStudy["id"];?>]);
 					  svg<?php echo $arrStudy["id"];?>.append("g")
 						  .attr("transform", "translate(0," + height<?php echo $arrStudy["id"];?> + ")")

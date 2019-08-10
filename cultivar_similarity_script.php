@@ -49,7 +49,7 @@
 		$objAssembly->study->source_alleles = array_column($objAssembly->study->snps, "source_cultivar");
 		$objAssembly->study->comparison_alleles = array_column($objAssembly->study->snps, "compare_cultivar");
 		$objAssembly->study->mismatch_alleles = array_diff_assoc($objAssembly->study->source_alleles, $objAssembly->study->comparison_alleles);
-		$objAssembly->study->result->similarity = count($objAssembly->study->snps) - count($objAssembly->study->mismatch_alleles);
+		$objAssembly->study->result->similarity = ((count($objAssembly->study->snps) - count($objAssembly->study->mismatch_alleles)) / count($objAssembly->study->snps)) * 100;
 		echo json_encode($objAssembly->study->result);
 	//}
 	//****************************************************************************************************************
