@@ -32,7 +32,9 @@
 	$objAssembly->study->cultivar_key_1 = $objRequest->cultivar_key_1;
 	$objAssembly->study->cultivar_key_2 = $objRequest->cultivar_key_2;
 	$objAssembly->study->result = new stdClass();
+	$objAssembly->study->result->cultivar_key = $objAssembly->study->cultivar_key_2;
 	$objAssembly->study->result->similarity = 0;
+	$objAssembly->study->result->name = " ";
 	//****************************************************************************************************************
 	//	v--- PHP -- 1C - END of preparing selections
 	//****************************************************************************************************************
@@ -49,7 +51,8 @@
 		$objAssembly->study->source_alleles = array_column($objAssembly->study->snps, "source_cultivar");
 		$objAssembly->study->comparison_alleles = array_column($objAssembly->study->snps, "compare_cultivar");
 		$objAssembly->study->mismatch_alleles = array_diff_assoc($objAssembly->study->source_alleles, $objAssembly->study->comparison_alleles);
-		$objAssembly->study->result->similarity = ((count($objAssembly->study->snps) - count($objAssembly->study->mismatch_alleles)) / count($objAssembly->study->snps)) * 100;
+		//$objAssembly->study->result->similarity = round(((count($objAssembly->study->snps) - count($objAssembly->study->mismatch_alleles)) / count($objAssembly->study->snps)) * 100);
+		$objAssembly->study->result->similarity = count($objAssembly->study->snps) - count($objAssembly->study->mismatch_alleles);
 		echo json_encode($objAssembly->study->result);
 	//}
 	//****************************************************************************************************************

@@ -142,6 +142,8 @@
 			var boolConsoleLogging = <?php echo $objSettings->console_logging; ?>;
 			var objCoreRequests = <?php echo json_encode($objCoreRequests); ?>;
 			var arrData = [];
+			var arrCultivars = <?php echo json_encode($objAssembly->study->cultivars); ?>;
+
 			objCoreRequests.interval = <?php echo $objSettings->loop_interval; ?>;
 			objCoreRequests.requests_completed = 0;
 			function funCultivarSimilarityStart(){
@@ -193,11 +195,15 @@
 					document.getElementById("elmCultivarSimilarityResultsContainer").style.display = "block";
 					//window.location.href = "curate.php";
 					funCreateGraph();
+					funCreateTable();
 				}
 				funConsoleLog("Loop has finished.");
 			}
 		</script>
 		<script src="https://d3js.org/d3.v4.js"></script>
+		<script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.noStyle.js"></script>
+		<link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
+  		<link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-balham.css">
 		<style>
 			#elmCultivarSimilarityResultsContainer{
 				visibility: hidden;
@@ -246,6 +252,9 @@
 						<div class="card-body">
 							<div id="elmCultivarSimilarityProgressContainer">
 								<div class="row justify-content-center">
+									Analyzing SNPs
+								</div>
+								<div class="row justify-content-center">
 									<progress id="elmCultivarSimilarityProgress" value="0" max="1"></progress>
 								</div>
 								<div class="row justify-content-center">
@@ -253,12 +262,22 @@
 								</div>
 							</div>
 							<div id="elmCultivarSimilarityResultsContainer">
-								<p>
-									The following is a histogram of SNP similarity percentages (x-axis) and number of cultivars (y-axis) for the previsiusly selected region of this study.
-								</p>
-								<p>
-									<?php echo $objAssembly->study->name;?> cultivar used for this data: <strong><?php echo $objAssembly->study->cultivars[$objAssembly->study->cultivar_key]; ?></strong>.
-								</p>
+								<div class="row">
+									<div class="col-6" id="elmCultivarSimilarityText">
+										<p>
+											The following is a histogram of matching SNPs (x-axis) and number of cultivars (y-axis) for the currently selected region of this study.
+										</p>
+										<p>
+											<?php echo $objAssembly->study->name;?> cultivar used for this data: <strong><?php echo $objAssembly->study->cultivars[$objAssembly->study->cultivar_key]; ?></strong>.
+										</p>
+										<p>
+											All other cultivars within this study were compared against this base cultivar to determine similarity. To use a different cultivar as a base for this comparison, please make your selection from the table below.
+										</p>
+									</div>
+									<div class="col-6">
+										<div id="myGrid" style="height: 1px;width: 1px;" class="ag-theme-balham mt-0"></div>
+									</div>
+								</div>
 								<div id="elmCultivarSimilarityGraph"></div>
 							</div>
 						</div>
@@ -304,7 +323,8 @@
 
 				  // X axis: scale and draw:
 				  var x = d3.scaleLinear()
-				  	  //.domain([0, <?php echo $objAssembly->study->snp_count; ?>])
+				  	  //.domain([0, <?php echo $objAssembly->study->snp_count+1; ?>])
+					  //.domain([Math.floor(Math.min.apply(Math,arrData.map(function(o){return o.similarity;}))), Math.ceil(Math.max.apply(Math,arrData.map(function(o){return o.similarity;}))) + 1])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
 					  .domain([Math.floor(Math.min.apply(Math,arrData.map(function(o){return o.similarity;}))), Math.ceil(Math.max.apply(Math,arrData.map(function(o){return o.similarity;}))) + 1])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
 					  .range([0, width]);
 				  svg.append("g")
@@ -315,7 +335,7 @@
 				  var histogram = d3.histogram()
 					  .value(function(d) { return d.similarity; })   // I need to give the vector of value
 					  .domain(x.domain())  // then the domain of the graphic
-					  .thresholds(x.ticks(100)); // then the numbers of bins
+					  .thresholds(x.ticks(50)); // then the numbers of bins
 
 				  // And apply this function to data to get the bins
 				  var bins = histogram(arrData);
@@ -340,6 +360,49 @@
 
 
 						//document.getElementById("elmBrowseSNPCountStudy").innerHTML = data.length.toLocaleString();
+
+			}
+
+			function funCreateTable(){
+
+				var strCSSWidthprop = window.getComputedStyle(elmCultivarSimilarityText, null).getPropertyValue("width");
+				var strCSSHeightprop = window.getComputedStyle(elmCultivarSimilarityText, null).getPropertyValue("height");
+
+				intElemWidth = Math.floor(parseInt(strCSSWidthprop.substring(0, strCSSWidthprop.length - 2)) - 40);
+				intElemHeight = Math.floor(parseInt(strCSSHeightprop.substring(0, strCSSHeightprop.length - 2)) - 20);
+				strCSSWidthprop = intElemWidth.toString() + "px";
+				strCSSHeightprop = intElemHeight.toString() + "px";
+
+				document.getElementById("myGrid").style.width = strCSSWidthprop;
+				document.getElementById("myGrid").style.height = strCSSHeightprop;
+
+				for (intLoopCounter = 0; intLoopCounter < arrData.length; intLoopCounter++) {
+					//text += cars[i] + "<br>";
+					arrData[intLoopCounter].name = arrCultivars[arrData[intLoopCounter].cultivar_key];
+				}
+
+				//alert(JSON.stringify(arrData));
+			    // specify the columns
+			    var columnDefs = [
+			      {headerName: "Cultivar", field: "name", sortable: true, filter: true, cellRenderer: function(params) {
+				      return '<a href="cultivar_similarity.php?assembly_id=<?php echo $objAssembly->id;?>&structure_id=<?php echo $objAssembly->structure->id;?>&start_position=<?php echo $objAssembly->structure->start_position;?>&stop_position=<?php echo $objAssembly->structure->stop_position;?>&study_id=<?php echo $objAssembly->study->id;?>&cultivar_key='+params.data.cultivar_key+'">'+ params.value+'</a>'
+				  }},
+				  {headerName: "Matching SNPs", field: "similarity", sortable: true, filter: true}
+			    ];
+
+
+			    // let the grid know which columns and what data to use
+			    var gridOptions = {
+			      columnDefs: columnDefs,
+				  rowSelection: 'single',
+			      rowData: arrData
+			    };
+
+			  	// lookup the container we want the Grid to use
+			  	var eGridDiv = document.querySelector('#myGrid');
+
+			  	// create the grid passing in the div to use together with the columns & data we want to use
+				new agGrid.Grid(eGridDiv, gridOptions);
 
 			}
 
