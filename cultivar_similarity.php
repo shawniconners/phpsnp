@@ -113,12 +113,12 @@
 	//for($intLoopCounter = 10000; $intLoopCounter < 10010; $intLoopCounter++){
 	//for($intLoopCounter = (count($objAssembly->study->cultivars)-1); $intLoopCounter > 19000 ; $intLoopCounter--){
 	//for($intLoopCounter = 10500; $intLoopCounter > 10000 ; $intLoopCounter--){
-		//if($intLoopCounter != $objAssembly->study->cultivar_key){
+		if($intLoopCounter != $objAssembly->study->cultivar_key){
 			$objRequest = new stdClass();
 			$objRequest->status = "ready"; // options: ready, active, complete
 			$objRequest->url = "cultivar_similarity_script.php?study_id=".$objAssembly->study->id."&structure_id=".$objAssembly->structure->id."&start_position=".$objAssembly->structure->start_position."&stop_position=".$objAssembly->structure->stop_position."&cultivar_key_1=".$objAssembly->study->cultivar_key."&cultivar_key_2=".$intLoopCounter;
 			array_push($objCoreRequests->requests, $objRequest);
-		//}
+		}
 	}
 
 	//****************************************************************************************************************
@@ -257,7 +257,7 @@
 									The following is a histogram of SNP similarity percentages (x-axis) and number of cultivars (y-axis) for the previsiusly selected region of this study.
 								</p>
 								<p>
-									Reference cultivar used for this data: <strong><?php echo $objAssembly->study->cultivars[$objAssembly->study->cultivar_key]; ?></strong>.
+									<?php echo $objAssembly->study->name;?> cultivar used for this data: <strong><?php echo $objAssembly->study->cultivars[$objAssembly->study->cultivar_key]; ?></strong>.
 								</p>
 								<div id="elmCultivarSimilarityGraph"></div>
 							</div>
@@ -291,7 +291,7 @@
 				// set the dimensions and margins of the graph
 				var margin = {top: 10, right: 20, bottom: 20, left: 40},
 					width = intElemWidth - margin.left - margin.right,
-					height = 800 - margin.top - margin.bottom;
+					height = 400 - margin.top - margin.bottom;
 
 				// append the svg object to the body of the page
 				var svg = d3.select("#elmCultivarSimilarityGraph")
@@ -305,7 +305,7 @@
 				  // X axis: scale and draw:
 				  var x = d3.scaleLinear()
 				  	  //.domain([0, <?php echo $objAssembly->study->snp_count; ?>])
-					  .domain([0, 101])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
+					  .domain([Math.floor(Math.min.apply(Math,arrData.map(function(o){return o.similarity;}))), Math.ceil(Math.max.apply(Math,arrData.map(function(o){return o.similarity;}))) + 1])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
 					  .range([0, width]);
 				  svg.append("g")
 					  .attr("transform", "translate(0," + height + ")")
