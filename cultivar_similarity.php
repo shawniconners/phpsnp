@@ -274,7 +274,7 @@
 									</p>
 								</div>
 								<div id="elmCultivarSimilarityGraph"></div>
-								<div id="myGrid" style="height: 1px;width: 1px;" class="ag-theme-balham mt-4 ml-4"></div>
+								<div id="myGrid" style="height: 1px;width: 1px;" class="ag-theme-balham mt-4 ml-3"></div>
 							</div>
 						</div>
 					</div>
