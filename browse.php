@@ -352,7 +352,7 @@
 					  // Y axis: scale and draw:
 					  var y<?php echo $arrStudy["id"];?> = d3.scaleLinear()
 						  .range([height<?php echo $arrStudy["id"];?>, 0]);
-						  y<?php echo $arrStudy["id"];?>.domain([0, d3.max(bins<?php echo $arrStudy["id"];?>, function(d) { return d.length; })]);   // d3.hist has to be called before the Y axis obviously
+						  y<?php echo $arrStudy["id"];?>.domain([0, 1.02 * d3.max(bins<?php echo $arrStudy["id"];?>, function(d) { return d.length; })]);   // d3.hist has to be called before the Y axis obviously
 					  svg<?php echo $arrStudy["id"];?>.append("g")
 						  .call(d3.axisLeft(y<?php echo $arrStudy["id"];?>));
 

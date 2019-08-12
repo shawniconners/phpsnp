@@ -262,23 +262,19 @@
 								</div>
 							</div>
 							<div id="elmCultivarSimilarityResultsContainer">
-								<div class="row">
-									<div class="col-6" id="elmCultivarSimilarityText">
-										<p>
-											The following is a histogram of matching SNPs (x-axis) and number of cultivars (y-axis) for the currently selected region of this study.
-										</p>
-										<p>
-											<?php echo $objAssembly->study->name;?> cultivar used for this data: <strong><?php echo $objAssembly->study->cultivars[$objAssembly->study->cultivar_key]; ?></strong>.
-										</p>
-										<p>
-											All other cultivars within this study were compared against this base cultivar to determine similarity. To use a different cultivar as a base for this comparison, please make your selection from the table below.
-										</p>
-									</div>
-									<div class="col-6">
-										<div id="myGrid" style="height: 1px;width: 1px;" class="ag-theme-balham mt-0"></div>
-									</div>
+								<div id="elmCultivarSimilarityText">
+									<p>
+										The following is an analysis of matching SNPs (x-axis) and number of cultivars (y-axis) for the currently selected region of this study.
+									</p>
+									<p>
+										<?php echo $objAssembly->study->name;?> cultivar used for this data: <strong><?php echo $objAssembly->study->cultivars[$objAssembly->study->cultivar_key]; ?></strong>.
+									</p>
+									<p>
+										All other cultivars within this study were compared against this base cultivar to determine similarity. To use a different cultivar as a base for this comparison, please make your selection from the table below.
+									</p>
 								</div>
 								<div id="elmCultivarSimilarityGraph"></div>
+								<div id="myGrid" style="height: 1px;width: 1px;" class="ag-theme-balham mt-4 ml-4"></div>
 							</div>
 						</div>
 					</div>
@@ -310,7 +306,7 @@
 				// set the dimensions and margins of the graph
 				var margin = {top: 10, right: 20, bottom: 20, left: 40},
 					width = intElemWidth - margin.left - margin.right,
-					height = 400 - margin.top - margin.bottom;
+					height = 200 - margin.top - margin.bottom;
 
 				// append the svg object to the body of the page
 				var svg = d3.select("#elmCultivarSimilarityGraph")
@@ -323,9 +319,10 @@
 
 				  // X axis: scale and draw:
 				  var x = d3.scaleLinear()
-				  	  //.domain([0, <?php echo $objAssembly->study->snp_count+1; ?>])
-					  //.domain([Math.floor(Math.min.apply(Math,arrData.map(function(o){return o.similarity;}))), Math.ceil(Math.max.apply(Math,arrData.map(function(o){return o.similarity;}))) + 1])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
-					  .domain([Math.floor(Math.min.apply(Math,arrData.map(function(o){return o.similarity;}))), Math.ceil(Math.max.apply(Math,arrData.map(function(o){return o.similarity;}))) + 1])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
+				  	  //.domain([0, 105])
+					  //.domain([Math.floor(Math.min.apply(Math,arrData.map(function(o){return o.similarity;}))), Math.ceil(Math.max.apply(Math,arrData.map(function(o){return o.similarity;}))) * 1.05])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
+					  //.domain([Math.floor(Math.min.apply(Math,arrData.map(function(o){return o.similarity;}))) - 1, Math.ceil(Math.max.apply(Math,arrData.map(function(o){return o.similarity;}))) + 1])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
+					  .domain([0, Math.ceil(Math.max.apply(Math,arrData.map(function(o){return o.similarity;}))) * 1.05])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
 					  .range([0, width]);
 				  svg.append("g")
 					  .attr("transform", "translate(0," + height + ")")
@@ -371,7 +368,8 @@
 				intElemWidth = Math.floor(parseInt(strCSSWidthprop.substring(0, strCSSWidthprop.length - 2)) - 40);
 				intElemHeight = Math.floor(parseInt(strCSSHeightprop.substring(0, strCSSHeightprop.length - 2)) - 20);
 				strCSSWidthprop = intElemWidth.toString() + "px";
-				strCSSHeightprop = intElemHeight.toString() + "px";
+				//strCSSHeightprop = intElemHeight.toString() + "px";
+				strCSSHeightprop = "300px";
 
 				document.getElementById("myGrid").style.width = strCSSWidthprop;
 				document.getElementById("myGrid").style.height = strCSSHeightprop;
