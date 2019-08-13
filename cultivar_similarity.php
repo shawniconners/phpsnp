@@ -230,30 +230,74 @@
 					</p>
 				</div>
 				<div class="row">
-					<div class="col-4">
+					<div class="card w-100 mt-3">
 						<div class="card-header text-white bg-secondary font-weight-bold">
-							Study
+							Overview
 						</div>
 						<div class="card-body">
-							<h4 class="mb-0 mt-0"><?php echo $objAssembly->name;?></h4>
-							<small class="mb-0 mt-0">Assembly</small>
-							<h4 class="mb-0 mt-2"><?php echo $objAssembly->structure->name;?></h4>
-							<small class="mb-0 mt-0">Structure</small>
-							<h4 class="mb-0 mt-2"><?php echo number_format($objAssembly->structure->start_position);?></h4>
-							<small class="mb-0 mt-0">Start</small>
-							<h4 class="mb-0 mt-2"><?php echo number_format($objAssembly->structure->stop_position);?></h4>
-							<small class="mb-0 mt-0">Stop</small>
-							<h4 class="mb-0 mt-2"><?php echo $objAssembly->study->name;?></h4>
-							<small class="mb-0 mt-0">Study</small>
-							<h4 class="mb-0 mt-2"><?php echo number_format($objAssembly->study->cultivar_count);?></h4>
-							<small class="mb-0 mt-0">Cultivars</small>
-							<h4 class="mb-0 mt-2"><?php echo number_format($objAssembly->study->snp_count);?></h4>
-							<small class="mb-0 mt-0">SNPs</small>
+							<div class="container">
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="row">
+											<div class="col-sm-4">
+									      		<strong>Assembly</strong>
+									    	</div>
+									    	<div class="col-sm-8">
+									      		<?php echo $objAssembly->name;?>
+									    	</div>
+										</div>
+										<div class="row">
+											<div class="col-sm-4">
+									      		<strong>Structure</strong>
+									    	</div>
+									    	<div class="col-sm-8">
+									      		<?php echo $objAssembly->structure->name;?>
+									    	</div>
+										</div>
+										<div class="row">
+											<div class="col-sm-4">
+									      		<strong>Region</strong>
+									    	</div>
+									    	<div class="col-sm-8">
+									      		<?php echo number_format($objAssembly->structure->start_position);?> - <?php echo number_format($objAssembly->structure->stop_position);?>
+									    	</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="row">
+											<div class="col-sm-4">
+									      		<strong>Study</strong>
+									    	</div>
+									    	<div class="col-sm-8">
+									      		<?php echo $objAssembly->study->name;?>
+									    	</div>
+										</div>
+										<div class="row">
+											<div class="col-sm-4">
+									      		<strong>SNPs</strong>
+									    	</div>
+									    	<div class="col-sm-8">
+									      		<?php echo number_format($objAssembly->study->snp_count);?>
+									    	</div>
+										</div>
+										<div class="row">
+											<div class="col-sm-4">
+									      		<strong>Cultivars</strong>
+									    	</div>
+									    	<div class="col-sm-8">
+									      		<?php echo number_format($objAssembly->study->cultivar_count);?>
+									    	</div>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
-					<div class="col-8">
+				</div>
+				<div class="row">
+					<div class="card w-100 mt-3">
 						<div class="card-header text-white bg-secondary font-weight-bold">
-							Cultivar Similarity
+							Analysis Results
 						</div>
 						<div class="card-body">
 							<p>
@@ -275,12 +319,12 @@
 							</div>
 							<div id="elmCultivarSimilarityResultsContainer">
 								<div id="elmCultivarSimilarityGraph"></div>
-								<div id="myGrid" style="height: 1px;width: 1px;" class="ag-theme-balham mt-4 ml-3"></div>
+								<div id="myGrid" style="height: 1px;width: 1px;" class="ag-theme-balham mt-4 ml-4 mb-3"></div>
+								<a class="btn btn-success float-right mr-3" href="assembly_upload.php" role="button">Download Results for <?php echo $objAssembly->study->cultivars[$objAssembly->study->cultivar_key]; ?></a>
 							</div>
 						</div>
 					</div>
 				</div>
-
 				<hr/>
 			</div> <!-- /container -->
 		</main>
@@ -319,11 +363,15 @@
 						  "translate(" + margin.left + "," + margin.top + ")");
 
 				  // X axis: scale and draw:
+				  var intRangeBottom = 0;
+				  if(Math.floor(Math.min.apply(Math,arrData.map(function(o){return o.similarity;}))) > 1){
+					  intRangeBottom = Math.floor(Math.min.apply(Math,arrData.map(function(o){return o.similarity;}))) - 1;
+				  }
 				  var x = d3.scaleLinear()
 				  	  //.domain([0, 105])
 					  //.domain([Math.floor(Math.min.apply(Math,arrData.map(function(o){return o.similarity;}))), Math.ceil(Math.max.apply(Math,arrData.map(function(o){return o.similarity;}))) * 1.05])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
 					  //.domain([Math.floor(Math.min.apply(Math,arrData.map(function(o){return o.similarity;}))) - 1, Math.ceil(Math.max.apply(Math,arrData.map(function(o){return o.similarity;}))) + 1])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
-					  .domain([0, Math.ceil(Math.max.apply(Math,arrData.map(function(o){return o.similarity;}))) * 1.05])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
+					  .domain([intRangeBottom, Math.ceil(Math.max.apply(Math,arrData.map(function(o){return o.similarity;}))) * 1.05])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
 					  .range([0, width]);
 				  svg.append("g")
 					  .attr("transform", "translate(0," + height + ")")
