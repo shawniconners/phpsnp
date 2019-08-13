@@ -93,7 +93,7 @@
 	      	<div class="container">
 		        <div class="row">
 					<h2><?php echo $objAssembly->name; ?></h2>
-					<p class="lead">Below is a list of every study and structure found in the <strong><?php echo $objAssembly->name; ?></strong> assembly. Click on a study to view more information.</p>
+					<p class="lead">Below is a list of every uploaded study for the <strong><?php echo $objAssembly->name; ?></strong> assembly. Click on a study to view more information. Below this list of studies you will find a breakdown of every structure found within this assembly.</p>
 					<p class="lead">
 						<a id="elmAssemblyViewUploadStudy" class="btn btn-success" href="study_upload.php?assembly_id=<?php echo $objAssembly->id; ?>" role="button">Upload Study</a>
 						<a id="elmAssemblyViewDownload" class="btn btn-primary" href="assembly_download_script.php?id=<?php echo $objAssembly->id; ?>" role="button">Download Assembly</a>

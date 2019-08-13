@@ -214,17 +214,23 @@
 	<body onload="funCultivarSimilarityStart()">
 		<?php
 			//****************************************************************************************************************
-			//	^--- PHP -- 3A - START of header pop
+			//	^--- PHP -- 3A - START of header
 			//****************************************************************************************************************
-			include "header_pop.php";
+			include "header.php";
 			//****************************************************************************************************************
-			//	v--- PHP -- 3A - END of header pop
+			//	v--- PHP -- 3A - END of header
 			//****************************************************************************************************************
 		?>
 	    <main role="main">
-	      	<div class="container-fluid">
+	      	<div class="container">
 				<div class="row">
-					<div class="col-3">
+					<h2>Cultivar Similarity</h2>
+					<p class="lead">
+						The following is an analysis of matching SNPs (x-axis) and number of cultivars (y-axis) for the currently selected region of this study, as compared to a base cultivar.
+					</p>
+				</div>
+				<div class="row">
+					<div class="col-4">
 						<div class="card-header text-white bg-secondary font-weight-bold">
 							Study
 						</div>
@@ -245,11 +251,17 @@
 							<small class="mb-0 mt-0">SNPs</small>
 						</div>
 					</div>
-					<div class="col-9">
+					<div class="col-8">
 						<div class="card-header text-white bg-secondary font-weight-bold">
 							Cultivar Similarity
 						</div>
 						<div class="card-body">
+							<p>
+								<?php echo $objAssembly->study->name;?> base cultivar used for this analysis: <strong><?php echo $objAssembly->study->cultivars[$objAssembly->study->cultivar_key]; ?></strong>.
+							</p>
+							<p>
+								All other cultivars within this study were compared against this base cultivar to determine similarity. To use a different cultivar as a base for this comparison, please make your selection from the table that appears below.
+							</p>
 							<div id="elmCultivarSimilarityProgressContainer">
 								<div class="row justify-content-center">
 									Analyzing SNPs
@@ -262,17 +274,6 @@
 								</div>
 							</div>
 							<div id="elmCultivarSimilarityResultsContainer">
-								<div id="elmCultivarSimilarityText">
-									<p>
-										The following is an analysis of matching SNPs (x-axis) and number of cultivars (y-axis) for the currently selected region of this study.
-									</p>
-									<p>
-										<?php echo $objAssembly->study->name;?> cultivar used for this data: <strong><?php echo $objAssembly->study->cultivars[$objAssembly->study->cultivar_key]; ?></strong>.
-									</p>
-									<p>
-										All other cultivars within this study were compared against this base cultivar to determine similarity. To use a different cultivar as a base for this comparison, please make your selection from the table below.
-									</p>
-								</div>
 								<div id="elmCultivarSimilarityGraph"></div>
 								<div id="myGrid" style="height: 1px;width: 1px;" class="ag-theme-balham mt-4 ml-3"></div>
 							</div>
@@ -362,11 +363,11 @@
 
 			function funCreateTable(){
 
-				var strCSSWidthprop = window.getComputedStyle(elmCultivarSimilarityText, null).getPropertyValue("width");
-				var strCSSHeightprop = window.getComputedStyle(elmCultivarSimilarityText, null).getPropertyValue("height");
+				var elmCultivarSimilarityGraph = document.getElementById("elmCultivarSimilarityGraph");
+
+				var strCSSWidthprop = window.getComputedStyle(elmCultivarSimilarityGraph, null).getPropertyValue("width");
 
 				intElemWidth = Math.floor(parseInt(strCSSWidthprop.substring(0, strCSSWidthprop.length - 2)) - 40);
-				intElemHeight = Math.floor(parseInt(strCSSHeightprop.substring(0, strCSSHeightprop.length - 2)) - 20);
 				strCSSWidthprop = intElemWidth.toString() + "px";
 				//strCSSHeightprop = intElemHeight.toString() + "px";
 				strCSSHeightprop = "300px";

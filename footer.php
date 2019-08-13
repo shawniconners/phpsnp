@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container">
 	<div class="row float-right mb-3 mr-4">
 		<small>Created with <a href="https://www.phpsnp.com">phpSNP</a>, an <a href="https://github.com/shawniconners/phpsnp">open-source</a> project.</small>
 	</div>
