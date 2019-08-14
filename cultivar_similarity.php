@@ -188,7 +188,7 @@
 					setTimeout(function(){funLoop();}, objCoreRequests.interval);
 				}else{
 					funConsoleLog("All requests completed.");
-					elmCultivarSimilarityProgressPercent.innerHTML = "100% Complete. Displaying data..."
+					elmCultivarSimilarityProgressPercent.innerHTML = "100% Complete. Displaying data...";
 					document.getElementById("elmCultivarSimilarityProgressContainer").style.visibility = "hidden";
 					document.getElementById("elmCultivarSimilarityProgressContainer").style.display = "none";
 					document.getElementById("elmCultivarSimilarityResultsContainer").style.visibility = "visible";
@@ -196,6 +196,7 @@
 					//window.location.href = "curate.php";
 					funCreateGraph();
 					funCreateTable();
+					funCreateDownload();
 				}
 				funConsoleLog("Loop has finished.");
 			}
@@ -320,7 +321,13 @@
 							<div id="elmCultivarSimilarityResultsContainer">
 								<div id="elmCultivarSimilarityGraph"></div>
 								<div id="myGrid" style="height: 1px;width: 1px;" class="ag-theme-balham mt-4 ml-4 mb-3"></div>
-								<a class="btn btn-success float-right mr-3" href="assembly_upload.php" role="button">Download Results for <?php echo $objAssembly->study->cultivars[$objAssembly->study->cultivar_key]; ?></a>
+								<form action="similarity_download_script.php" method="post">
+									<input type="hidden" name="elmCultivarSimilarityStudy" id="elmCultivarSimilarityStudy" value="<?php echo $objAssembly->study->name;?>" />
+									<input type="hidden" name="elmCultivarSimilaritySNPs" id="elmCultivarSimilaritySNPs" value="<?php echo $objAssembly->study->snp_count;?>" />
+									<input type="hidden" name="elmCultivarSimilarityBaseCultivar" id="elmCultivarSimilarityBaseCultivar" value="<?php echo $objAssembly->study->cultivars[$objAssembly->study->cultivar_key]; ?>" />
+									<input type="hidden" name="elmCultivarSimilarityResults" id="elmCultivarSimilarityResults" value="" />
+									<button class="btn btn-success float-right mr-3" role="submit">Download Results for <?php echo $objAssembly->study->cultivars[$objAssembly->study->cultivar_key]; ?></button>
+								</form>
 							</div>
 						</div>
 					</div>
@@ -451,6 +458,11 @@
 			  	// create the grid passing in the div to use together with the columns & data we want to use
 				new agGrid.Grid(eGridDiv, gridOptions);
 
+			}
+
+			function funCreateDownload(){
+				document.getElementById("elmCultivarSimilarityResults").value = JSON.stringify(arrData);
+				//alert(document.getElementById("elmCultivarSimilarityResults").value);
 			}
 
 		</script>
