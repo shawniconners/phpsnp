@@ -34,6 +34,11 @@
 		}
 		return $inc_structure_name;
 	}
+	function funReadableFilesize($inc_bytes) {
+    	$arrSizeSuffixes = array('B','kB','MB','GB','TB','PB');
+    	$intSizeFactor = floor((strlen($inc_bytes) - 1) / 3);
+    	return sprintf("%.2f", $inc_bytes / pow(1024, $intSizeFactor))." ".$arrSizeSuffixes[$intSizeFactor];
+	}
 	//****************************************************************************************************************
 	//	^--- PHP -- 1C - END of shared functions
 	//****************************************************************************************************************
