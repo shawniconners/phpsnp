@@ -168,6 +168,8 @@
 			}
 		</script>
 		<script src="https://d3js.org/d3.v4.js"></script>
+		<style>
+		</style>
 	</head>
 	<body>
 		<?php
@@ -322,52 +324,58 @@
 
 					// append the svg object to the body of the page
 					var svg<?php echo $arrStudy["id"];?> = d3.select("#elmBrowseDensityStudy<?php echo $arrStudy["id"];?>")
-					  .append("svg")
+					  	.append("svg")
 						.attr("width", width<?php echo $arrStudy["id"];?> + margin<?php echo $arrStudy["id"];?>.left + margin<?php echo $arrStudy["id"];?>.right)
 						.attr("height", height<?php echo $arrStudy["id"];?> + margin<?php echo $arrStudy["id"];?>.top + margin<?php echo $arrStudy["id"];?>.bottom)
-					  .append("g")
+					  	.append("g")
 						.attr("transform",
 							  "translate(" + margin<?php echo $arrStudy["id"];?>.left + "," + margin<?php echo $arrStudy["id"];?>.top + ")");
 
 					// get the data
 					d3.json("snp_positions_script.php?study_id=<?php echo $arrStudy["id"];?>&structure_id=<?php echo $objCollection->selected->structure->id; ?>&start_position=<?php echo $objCollection->selected->start->position; ?>&stop_position=<?php echo $objCollection->selected->stop->position; ?>", function(data) {
 
-					  // X axis: scale and draw:
-					  var x<?php echo $arrStudy["id"];?> = d3.scaleLinear()
-						  .domain([<?php echo $objCollection->selected->start->position; ?>, <?php echo $objCollection->selected->stop->position; ?>+1])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
-						  .range([0, width<?php echo $arrStudy["id"];?>]);
-					  svg<?php echo $arrStudy["id"];?>.append("g")
-						  .attr("transform", "translate(0," + height<?php echo $arrStudy["id"];?> + ")")
-						  .call(d3.axisBottom(x<?php echo $arrStudy["id"];?>));
+						if(data.length == 0){
+							elmBrowseDensityStudy<?php echo $arrStudy["id"];?>.parentNode.removeChild(elmBrowseDensityStudy<?php echo $arrStudy["id"];?>);
+							document.getElementById("elmBrowseSNPCountStudy<?php echo $arrStudy["id"];?>").innerHTML = "0";
+						}else{
+							// X axis: scale and draw:
+						  	var x<?php echo $arrStudy["id"];?> = d3.scaleLinear()
+							  	.domain([<?php echo $objCollection->selected->start->position; ?>, <?php echo $objCollection->selected->stop->position; ?>+1])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
+							  	.range([0, width<?php echo $arrStudy["id"];?>]);
+						  	svg<?php echo $arrStudy["id"];?>.append("g")
+							  	.attr("transform", "translate(0," + height<?php echo $arrStudy["id"];?> + ")")
+							  	.call(d3.axisBottom(x<?php echo $arrStudy["id"];?>));
 
-					  // set the parameters for the histogram
-					  var histogram<?php echo $arrStudy["id"];?> = d3.histogram()
-						  .value(function(d) { return d.position; })   // I need to give the vector of value
-						  .domain(x<?php echo $arrStudy["id"];?>.domain())  // then the domain of the graphic
-						  .thresholds(x<?php echo $arrStudy["id"];?>.ticks(70)); // then the numbers of bins
+						  	// set the parameters for the histogram
+						  	var histogram<?php echo $arrStudy["id"];?> = d3.histogram()
+							  	.value(function(d) { return d.position; })   // I need to give the vector of value
+							  	.domain(x<?php echo $arrStudy["id"];?>.domain())  // then the domain of the graphic
+							  	.thresholds(x<?php echo $arrStudy["id"];?>.ticks(70)); // then the numbers of bins
 
-					  // And apply this function to data to get the bins
-					  var bins<?php echo $arrStudy["id"];?> = histogram<?php echo $arrStudy["id"];?>(data);
+						  	// And apply this function to data to get the bins
+						  	var bins<?php echo $arrStudy["id"];?> = histogram<?php echo $arrStudy["id"];?>(data);
 
-					  // Y axis: scale and draw:
-					  var y<?php echo $arrStudy["id"];?> = d3.scaleLinear()
-						  .range([height<?php echo $arrStudy["id"];?>, 0]);
-						  y<?php echo $arrStudy["id"];?>.domain([0, 1.02 * d3.max(bins<?php echo $arrStudy["id"];?>, function(d) { return d.length; })]);   // d3.hist has to be called before the Y axis obviously
-					  svg<?php echo $arrStudy["id"];?>.append("g")
-						  .call(d3.axisLeft(y<?php echo $arrStudy["id"];?>));
+						  	// Y axis: scale and draw:
+						  	var y<?php echo $arrStudy["id"];?> = d3.scaleLinear()
+							  	.range([height<?php echo $arrStudy["id"];?>, 0]);
+							y<?php echo $arrStudy["id"];?>.domain([0, 1.02 * d3.max(bins<?php echo $arrStudy["id"];?>, function(d) { return d.length; })]);   // d3.hist has to be called before the Y axis obviously
+						  	svg<?php echo $arrStudy["id"];?>.append("g")
+								.call(d3.axisLeft(y<?php echo $arrStudy["id"];?>));
 
-					  // append the bar rectangles to the svg element
-					  svg<?php echo $arrStudy["id"];?>.selectAll("rect")
-						  .data(bins<?php echo $arrStudy["id"];?>)
-						  .enter()
-						  .append("rect")
-							.attr("x", 1)
-							.attr("transform", function(d) { return "translate(" + x<?php echo $arrStudy["id"];?>(d.x0) + "," + y<?php echo $arrStudy["id"];?>(d.length) + ")"; })
-							.attr("width", function(d) { return x<?php echo $arrStudy["id"];?>(d.x1) - x<?php echo $arrStudy["id"];?>(d.x0) -1 ; })
-							.attr("height", function(d) { return height<?php echo $arrStudy["id"];?> - y<?php echo $arrStudy["id"];?>(d.length); })
-							.style("fill", "#69b3a2");
+						  	// append the bar rectangles to the svg element
+						  	svg<?php echo $arrStudy["id"];?>.selectAll("rect")
+							  	.data(bins<?php echo $arrStudy["id"];?>)
+							  	.enter()
+							  	.append("rect")
+								.attr("x", 1)
+								.attr("transform", function(d) { return "translate(" + x<?php echo $arrStudy["id"];?>(d.x0) + "," + y<?php echo $arrStudy["id"];?>(d.length) + ")"; })
+								.attr("width", function(d) { return Math.round(x<?php echo $arrStudy["id"];?>(d.x1) - x<?php echo $arrStudy["id"];?>(d.x0) - 1 ); })
+								.attr("height", function(d) { return height<?php echo $arrStudy["id"];?> - y<?php echo $arrStudy["id"];?>(d.length); })
+								.style("fill", "#69b3a2");
+								document.getElementById("elmBrowseSNPCountStudy<?php echo $arrStudy["id"];?>").innerHTML = data.length.toLocaleString();
+						}
 
-							document.getElementById("elmBrowseSNPCountStudy<?php echo $arrStudy["id"];?>").innerHTML = data.length.toLocaleString();
+
 					});
 				</script>
 			<?php
