@@ -278,7 +278,7 @@
 											    </button>
 											    <div class="dropdown-menu" aria-labelledby="elmBrowseSNPCountStudy<?php echo $arrStudy["id"];?>Dropdown">
 											      <a class="dropdown-item" href="cultivar_similarity.php?assembly_id=<?php echo $objCollection->selected->assembly->id;?>&structure_id=<?php echo $objCollection->selected->structure->id;?>&start_position=<?php echo $objCollection->selected->start->position;?>&stop_position=<?php echo $objCollection->selected->stop->position;?>&study_id=<?php echo $arrStudy["id"];?>">Cultivar Similarity</a>
-											      <a class="dropdown-item" href="#">Haplotype Flow</a>
+											      <a class="dropdown-item" href="haplotype_groups.php?assembly_id=<?php echo $objCollection->selected->assembly->id;?>&structure_id=<?php echo $objCollection->selected->structure->id;?>&start_position=<?php echo $objCollection->selected->start->position;?>&stop_position=<?php echo $objCollection->selected->stop->position;?>&study_id=<?php echo $arrStudy["id"];?>">Haplotype Groups</a>
 											    </div>
 											</div>
 										</div>
