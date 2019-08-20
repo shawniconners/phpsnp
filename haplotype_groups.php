@@ -364,7 +364,7 @@
 										<input type="hidden" name="elmHaplotypeGroupsStudy" id="elmHaplotypeGroupsStudy" value="<?php echo $objAssembly->study->name;?>" />
 										<input type="hidden" name="elmHaplotypeGroupsSNPs" id="elmHaplotypeGroupsSNPs" value="<?php echo json_encode($objAssembly->study->snps);?>" />
 										<input type="hidden" name="elmHaplotypeGroupsResults" id="elmHaplotypeGroupsResults" value="" />
-										<button class="btn btn-success float-left mr-1 mt-3 mb-0" role="submit">Download Analysis Results</button>
+										<button class="btn btn-success float-right mr-1 mt-3 mb-0" role="submit">Download Analysis Results</button>
 									</form>
 								</div>
 							</div>
