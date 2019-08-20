@@ -75,7 +75,7 @@
 	//****************************************************************************************************************
 	//	^--- PHP -- 1F - START of retrieving the snp count
 	//****************************************************************************************************************
-	$objAssembly->sql = "SELECT count(id) AS snp_count FROM tblStudy".$objAssembly->study->id."Structure".$objAssembly->structure->id."SNPs WHERE position >= :start_position AND position <= :stop_position;";
+	$objAssembly->sql = "SELECT count(id) AS snp_count FROM tblStudy".$objAssembly->study->id."Structure".$objAssembly->structure->id."SNPs WHERE position >= :start_position AND position <= :stop_position ORDER BY position ASC;";
 	$objAssembly->prepare = $objSettings->database->connection->prepare($objAssembly->sql);
 	$objAssembly->prepare->bindValue(':start_position', $objAssembly->structure->start_position, PDO::PARAM_INT);
 	$objAssembly->prepare->bindValue(':stop_position', $objAssembly->structure->stop_position, PDO::PARAM_INT);
@@ -99,11 +99,11 @@
 	//****************************************************************************************************************
 	//	^--- PHP -- 1H - START of finding the snp windows snp names and positions
 	//****************************************************************************************************************
-	$objAssembly->sql = "SELECT position, names, reference, alternate FROM tblStudy".$objAssembly->study->id."Structure".$objAssembly->structure->id."SNPs WHERE position >= :start_position AND position <= :stop_position LIMIT :snp_window;";
+	$objAssembly->sql = "SELECT position, names, reference, alternate FROM tblStudy".$objAssembly->study->id."Structure".$objAssembly->structure->id."SNPs WHERE position >= :start_position AND position <= :stop_position ORDER BY position ASC LIMIT ". $objAssembly->study->snp_window.";";
 	$objAssembly->prepare = $objSettings->database->connection->prepare($objAssembly->sql);
 	$objAssembly->prepare->bindValue(':start_position', $objAssembly->structure->start_position, PDO::PARAM_INT);
 	$objAssembly->prepare->bindValue(':stop_position', $objAssembly->structure->stop_position, PDO::PARAM_INT);
-	$objAssembly->prepare->bindValue(':snp_window', $objAssembly->study->snp_window, PDO::PARAM_INT);
+	//$objAssembly->prepare->bindValue(':snp_window', $objAssembly->study->snp_window, PDO::PARAM_INT);
 	$objAssembly->prepare->execute();
 	$objAssembly->study->snps = $objAssembly->prepare->fetchAll(PDO::FETCH_ASSOC);
 	//****************************************************************************************************************
@@ -113,8 +113,8 @@
 	//	^--- PHP -- 1I - START of converting the JSON database fields
 	//****************************************************************************************************************
 	for($intLoopCounter = 0; $intLoopCounter < count($objAssembly->study->snps); $intLoopCounter++){
-		$objAssembly->study->snps[$intLoopCounter]["names"] = json_decode($objAssembly->study->snps[$intLoopCounter]["names"]);
-		$objAssembly->study->snps[$intLoopCounter]["alternate"] = json_decode($objAssembly->study->snps[$intLoopCounter]["alternate"]);
+		$objAssembly->study->snps[$intLoopCounter]["names"] = implode(", ", json_decode($objAssembly->study->snps[$intLoopCounter]["names"]));
+		$objAssembly->study->snps[$intLoopCounter]["alternate"] = implode(", ", json_decode($objAssembly->study->snps[$intLoopCounter]["alternate"]));
 	}
 	//****************************************************************************************************************
 	//	v--- PHP -- 1I - END of converting the JSON database fields
@@ -164,6 +164,7 @@
 			arrData = [];
 			arrHaplotypeGroups = [];
 			arrCultivars = <?php echo json_encode($objAssembly->study->cultivars); ?>;
+			arrSNPs = <?php echo json_encode($objAssembly->study->snps); ?>;
 
 			objCoreRequests.interval = <?php echo $objSettings->loop_interval; ?>;
 			objCoreRequests.requests_completed = 0;
@@ -310,6 +311,25 @@
 									</div>
 								</div>
 							</div>
+							<?php
+								if($objAssembly->study->snp_count > $objAssembly->study->snp_window){
+									?>
+									<div class="alert alert-warning mb-0 mt-3" role="alert">
+										The region you selected for this study contains over 100 SNPs. To create the analysis that appears below we have limited the result set to the first 100 SNPs. The results below should not be considered accurate for the currently selected region. You may want to go back to the browse page and select a smaller region.
+									</div>
+									<?php
+								}
+							?>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="card w-100 mt-3">
+						<div class="card-header text-white bg-secondary font-weight-bold">
+							SNPs
+						</div>
+						<div class="card-body">
+							<div id="elmHaplotypeGroupsSNPsTable" style="height: 200px;width: 100%;" class="ag-theme-balham mt-1"></div>
 						</div>
 					</div>
 				</div>
@@ -319,15 +339,6 @@
 							Analysis Results
 						</div>
 						<div class="card-body">
-							<?php
-								if($objAssembly->study->snp_count > $objAssembly->study->snp_window){
-									?>
-									<div class="alert alert-warning" role="alert">
-										The region you selected for this study contains over 100 SNPs. To create the analysis that appears below we have limited the result set to the first 100 SNPs. The results below should not be considered accurate for the currently selected region. You may want to go back to the browse page and select a smaller region.
-									</div>
-									<?php
-								}
-							?>
 							<div id="elmHaplotypeGroupsProgressContainer">
 								<div class="row justify-content-center">
 									Analyzing SNPs
@@ -345,7 +356,8 @@
 								</div>
 								<div class="row">
 									<div id="elmHaplotypeGroupsOverviewTable" style="height: 1px;width: 1px;" class="ag-theme-balham mt-3 col-6"></div>
-									<div id="elmHaplotypeGroupsCultivarsTable" style="height: 1px;width: 1px;" class="ag-theme-balham mt-3 col-6"></div>
+									<div id="elmHaplotypeGroupsCultivarsTable" style="height: 1px;width: 1px;" class="ag-theme-balham mt-3 col-3"></div>
+									<div id="elmHaplotypeGroupsAllelesTable" class="ag-theme-balham mt-4 col-3 pt-1"></div>
 								</div>
 							</div>
 						</div>
@@ -365,8 +377,27 @@
 		?>
 		<script>
 
+			// specify the columns
+			var objHaplotypeGroupsSNPsTableColumnDefs = [
+			  {headerName: "Position", field: "position", sortable: true, filter: true},
+			  {headerName: "Name(s)", field: "names", sortable: true, filter: true},
+			  {headerName: "Reference", field: "reference", sortable: true, filter: true},
+			  {headerName: "Alternate(s)", field: "alternate", sortable: true, filter: true}
+			];
+
+			// let the grid know which columns and what data to use
+			var objHaplotypeGroupsSNPsTableGridOptions = {
+			  columnDefs: objHaplotypeGroupsSNPsTableColumnDefs,
+			  rowData: arrSNPs
+			};
+
+			// lookup the container we want the Grid to use
+			var elmHaplotypeGroupsSNPsTable = document.querySelector('#elmHaplotypeGroupsSNPsTable');
+
+			// create the grid passing in the div to use together with the columns & data we want to use
+			new agGrid.Grid(elmHaplotypeGroupsSNPsTable, objHaplotypeGroupsSNPsTableGridOptions);
+
 			function funFinalizeResults(){
-				//alert(arrData.length);
 
 				for(intOutterLoopCounter = 0; intOutterLoopCounter < arrData.length; intOutterLoopCounter++){
 					intHaplotypeFoundKey = -1;
@@ -384,14 +415,8 @@
 				}
 				arrHaplotypeGroups.sort((a, b) => (a.cultivar_keys.length < b.cultivar_keys.length) ? 1 : -1);
 
-				//var elmHaplotypeGroupsResultsText = document.getElementById("elmHaplotypeGroupsResultsText");
-
-				//var strCSSWidthprop = window.getComputedStyle(elmHaplotypeGroupsResultsText, null).getPropertyValue("width");
-
-				//intElemWidth = Math.floor(parseInt(strCSSWidthprop.substring(0, strCSSWidthprop.length - 2)) - 40);
-				//strCSSWidthprop = intElemWidth.toString() + "px";
 				strCSSWidthprop = "100%";
-				strCSSHeightprop = "300px";
+				strCSSHeightprop = "200px";
 
 				document.getElementById("elmHaplotypeGroupsOverviewTable").style.width = strCSSWidthprop;
 				document.getElementById("elmHaplotypeGroupsOverviewTable").style.height = strCSSHeightprop;
@@ -413,16 +438,13 @@
 				  {headerName: "Cultivars", field: "cultivar_count", sortable: true, filter: true}
 			    ];
 
-
 			    // let the grid know which columns and what data to use
 			    var objHaplotypeGroupsOverviewTableGridOptions = {
 			      columnDefs: objHaplotypeGroupsOverviewTableColumnDefs,
 				  rowSelection: 'single',
 				  onSelectionChanged: function(){
 					  var selectedRows = objHaplotypeGroupsOverviewTableGridOptions.api.getSelectedRows();
-					  funShowGroupCultivars(selectedRows[0].group_number-1);
-					  //alert(JSON.stringify(selectedRows[0]));
-					  //alert(selectedRows.length);
+					  funShowGroupCultivarsResults(selectedRows[0].group_number-1);
 				  },
 			      rowData: arrHaplotypeGroups
 			    };
@@ -433,34 +455,26 @@
 			  	// create the grid passing in the div to use together with the columns & data we want to use
 				new agGrid.Grid(elmHaplotypeGroupsOverviewTable, objHaplotypeGroupsOverviewTableGridOptions);
 
-
-
-
 				document.getElementById("elmHaplotypeGroupsCultivarsTable").style.width = strCSSWidthprop;
 				document.getElementById("elmHaplotypeGroupsCultivarsTable").style.height = strCSSHeightprop;
 
-			    funShowGroupCultivars(0);
+				objHaplotypeGroupsOverviewTableGridOptions.api.forEachNode( function (node) {
+			        if (node.data.group_number == 1) {
+			            node.setSelected(true);
+			        }
+			    });
 
-
-
-
-
-
-				//alert("Number of Groups: "+arrHaplotypeGroups.length+", Largest Group: "+intLargestGroup);
-				//document.getElementById("elmHaplotypeGroupsResultsContainer").innerHTML = JSON.stringify(arrHaplotypeGroups);
-				//alert(JSON.stringify(arrHaplotypeGroups));
 				delete arrData;
 
 			}
 
-			function funShowGroupCultivars(inc_key){
+			function funShowGroupCultivarsResults(inc_key){
 
 				document.getElementById("elmHaplotypeGroupsCultivarsTable").innerHTML = "";
 				// specify the columns
 			    var objHaplotypeGroupsCultivarsTableColumnDefs = [
 			      {headerName: "Group "+(inc_key+1)+" Cultivars", field: "name", sortable: true, filter: true}
 			    ];
-
 
 			    // let the grid know which columns and what data to use
 			    var objHaplotypeGroupsCultivarsTableGridOptions = {
@@ -473,6 +487,10 @@
 
 			  	// create the grid passing in the div to use together with the columns & data we want to use
 				new agGrid.Grid(elmHaplotypeGroupsCultivarsTable, objHaplotypeGroupsCultivarsTableGridOptions);
+
+				var elmHaplotypeGroupsAllelesTable = document.querySelector('#elmHaplotypeGroupsAllelesTable');
+				elmHaplotypeGroupsAllelesTable.innerHTML = "<p>Group "+(inc_key+1)+" SNP Results</p><p>"+arrHaplotypeGroups[inc_key].haplotype+"</p>";
+
 			}
 
 
