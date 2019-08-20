@@ -326,7 +326,7 @@
 									<input type="hidden" name="elmCultivarSimilaritySNPs" id="elmCultivarSimilaritySNPs" value="<?php echo $objAssembly->study->snp_count;?>" />
 									<input type="hidden" name="elmCultivarSimilarityBaseCultivar" id="elmCultivarSimilarityBaseCultivar" value="<?php echo $objAssembly->study->cultivars[$objAssembly->study->cultivar_key]; ?>" />
 									<input type="hidden" name="elmCultivarSimilarityResults" id="elmCultivarSimilarityResults" value="" />
-									<button class="btn btn-success float-right mr-3" role="submit">Download Results for <?php echo $objAssembly->study->cultivars[$objAssembly->study->cultivar_key]; ?></button>
+									<button class="btn btn-success float-right mr-3" role="submit">Download Analysis Results for <?php echo $objAssembly->study->cultivars[$objAssembly->study->cultivar_key]; ?></button>
 								</form>
 							</div>
 						</div>

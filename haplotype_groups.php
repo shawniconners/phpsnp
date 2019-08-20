@@ -359,6 +359,14 @@
 									<div id="elmHaplotypeGroupsCultivarsTable" style="height: 1px;width: 1px;" class="ag-theme-balham mt-3 col-3"></div>
 									<div id="elmHaplotypeGroupsAllelesTable" class="ag-theme-balham mt-4 col-3 pt-1"></div>
 								</div>
+								<div class="row">
+									<form action="haplotype_download_script.php" method="post" class="col-12">
+										<input type="hidden" name="elmHaplotypeGroupsStudy" id="elmHaplotypeGroupsStudy" value="<?php echo $objAssembly->study->name;?>" />
+										<input type="hidden" name="elmHaplotypeGroupsSNPs" id="elmHaplotypeGroupsSNPs" value="<?php echo json_encode($objAssembly->study->snps);?>" />
+										<input type="hidden" name="elmHaplotypeGroupsResults" id="elmHaplotypeGroupsResults" value="" />
+										<button class="btn btn-success float-left mr-1 mt-3 mb-0" role="submit">Download Analysis Results</button>
+									</form>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -489,7 +497,7 @@
 				new agGrid.Grid(elmHaplotypeGroupsCultivarsTable, objHaplotypeGroupsCultivarsTableGridOptions);
 
 				var elmHaplotypeGroupsAllelesTable = document.querySelector('#elmHaplotypeGroupsAllelesTable');
-				elmHaplotypeGroupsAllelesTable.innerHTML = "<p>Group "+(inc_key+1)+" SNP Results</p><p>"+arrHaplotypeGroups[inc_key].haplotype+"</p>";
+				elmHaplotypeGroupsAllelesTable.innerHTML = "<p>Group "+(inc_key+1)+" SNP Alleles</p><p>"+arrHaplotypeGroups[inc_key].haplotype+"</p>";
 
 			}
 
