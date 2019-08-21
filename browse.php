@@ -185,7 +185,7 @@
 	      	<div class="container">
 		        <div class="row">
 					<h2>Browse</h2>
-					<p class="lead">The following is a breakdown of SNP density from your uploaded studies. Change the assembly, structure and region by using the dropdowns and fields below. Additional views and research options are available by clicking the explore button within each study.</p>
+					<p class="lead">The following is a breakdown of SNP density from your uploaded studies. The selected region (x-axis) is graphed against the number of SNPs found (y-axis) within it. Change the assembly, structure and region by using the dropdowns and fields below. Additional views and research options are available by clicking the explore button within each study.</p>
 				</div>
 				<div class="row">
 					<div class="col-3">
