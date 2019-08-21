@@ -272,13 +272,13 @@
 											<small class="mb-0 mt-0">SNPs</small>
 											<h4 class="mb-0 mt-2"><?php echo number_format($arrStudy["cultivar_count"]);?></h4>
 											<small class="mb-0 mt-0">Cultivars</small><br />
-											<div class="btn-group mt-3 ml-0" role="group">
+											<div class="btn-group mt-3 ml-0" role="group" id="elmBrowseSNPCountStudy<?php echo $arrStudy["id"];?>Explore">
 											    <button id="elmBrowseSNPCountStudy<?php echo $arrStudy["id"];?>Dropdown" type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-											      Explore
+											    	Explore
 											    </button>
 											    <div class="dropdown-menu" aria-labelledby="elmBrowseSNPCountStudy<?php echo $arrStudy["id"];?>Dropdown">
-											      <a class="dropdown-item" href="cultivar_similarity.php?assembly_id=<?php echo $objCollection->selected->assembly->id;?>&structure_id=<?php echo $objCollection->selected->structure->id;?>&start_position=<?php echo $objCollection->selected->start->position;?>&stop_position=<?php echo $objCollection->selected->stop->position;?>&study_id=<?php echo $arrStudy["id"];?>">Cultivar Similarity</a>
-											      <a class="dropdown-item" href="haplotype_groups.php?assembly_id=<?php echo $objCollection->selected->assembly->id;?>&structure_id=<?php echo $objCollection->selected->structure->id;?>&start_position=<?php echo $objCollection->selected->start->position;?>&stop_position=<?php echo $objCollection->selected->stop->position;?>&study_id=<?php echo $arrStudy["id"];?>">Haplotype Groups</a>
+											    	<a class="dropdown-item" href="cultivar_similarity.php?assembly_id=<?php echo $objCollection->selected->assembly->id;?>&structure_id=<?php echo $objCollection->selected->structure->id;?>&start_position=<?php echo $objCollection->selected->start->position;?>&stop_position=<?php echo $objCollection->selected->stop->position;?>&study_id=<?php echo $arrStudy["id"];?>">Cultivar Similarity</a>
+											    	<a class="dropdown-item" href="haplotype_groups.php?assembly_id=<?php echo $objCollection->selected->assembly->id;?>&structure_id=<?php echo $objCollection->selected->structure->id;?>&start_position=<?php echo $objCollection->selected->start->position;?>&stop_position=<?php echo $objCollection->selected->stop->position;?>&study_id=<?php echo $arrStudy["id"];?>">Haplotype Groups</a>
 											    </div>
 											</div>
 										</div>
@@ -336,6 +336,9 @@
 
 						if(data.length == 0){
 							elmBrowseDensityStudy<?php echo $arrStudy["id"];?>.parentNode.removeChild(elmBrowseDensityStudy<?php echo $arrStudy["id"];?>);
+							elmBrowseSNPCountStudy<?php echo $arrStudy["id"];?>Explore = document.getElementById("elmBrowseSNPCountStudy<?php echo $arrStudy["id"];?>Explore");
+							elmBrowseSNPCountStudy<?php echo $arrStudy["id"];?>Explore.style.visibility = "hidden";
+							elmBrowseSNPCountStudy<?php echo $arrStudy["id"];?>Explore.style.display = "none";
 							document.getElementById("elmBrowseSNPCountStudy<?php echo $arrStudy["id"];?>").innerHTML = "0";
 						}else{
 							// X axis: scale and draw:

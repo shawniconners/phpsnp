@@ -440,6 +440,8 @@
 					}
 				}
 
+				delete arrData;
+
 			    // specify the columns
 			    var objHaplotypeGroupsOverviewTableColumnDefs = [
 			      {headerName: "Haplotype Group", field: "group_number", sortable: true, filter: true},
@@ -471,8 +473,6 @@
 			            node.setSelected(true);
 			        }
 			    });
-
-				delete arrData;
 
 			}
 
