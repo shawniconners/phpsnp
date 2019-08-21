@@ -360,9 +360,9 @@
 									<div id="elmHaplotypeGroupsAllelesTable" class="ag-theme-balham mt-4 col-3 pt-1"></div>
 								</div>
 								<div class="row">
-									<form action="haplotype_download_script.php" method="post" class="col-12">
+									<form action="groups_download_script.php" method="post" class="col-12">
 										<input type="hidden" name="elmHaplotypeGroupsStudy" id="elmHaplotypeGroupsStudy" value="<?php echo $objAssembly->study->name;?>" />
-										<input type="hidden" name="elmHaplotypeGroupsSNPs" id="elmHaplotypeGroupsSNPs" value="<?php echo json_encode($objAssembly->study->snps);?>" />
+										<input type="hidden" name="elmHaplotypeGroupsCultivars" id="elmHaplotypeGroupsCultivars" value="" />
 										<input type="hidden" name="elmHaplotypeGroupsResults" id="elmHaplotypeGroupsResults" value="" />
 										<button class="btn btn-success float-right mr-1 mt-3 mb-0" role="submit">Download Analysis Results</button>
 									</form>
@@ -441,6 +441,12 @@
 				}
 
 				delete arrData;
+
+				elmHaplotypeGroupsResults = document.getElementById("elmHaplotypeGroupsResults");
+				elmHaplotypeGroupsResults.value = JSON.stringify(arrHaplotypeGroups);
+
+				elmHaplotypeGroupsCultivars = document.getElementById("elmHaplotypeGroupsCultivars");
+				elmHaplotypeGroupsCultivars.value = JSON.stringify(arrCultivars);
 
 			    // specify the columns
 			    var objHaplotypeGroupsOverviewTableColumnDefs = [
