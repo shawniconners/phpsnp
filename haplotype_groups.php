@@ -352,7 +352,7 @@
 							</div>
 							<div id="elmHaplotypeGroupsResultsContainer">
 								<div id="elmHaplotypeGroupsResultsText">
-									To view details about a haplotype group, select the group from the table below. Cultivars that share this haplotype will then be displayed in the table to the right. The SNP allele values will also appear next to the list of cultivars within the sleected haplotype group.
+									To view details about a haplotype group, select the group from the table below. Cultivars that share this haplotype will then be displayed in the table to the right. The SNP allele values will also appear next to the list of cultivars within the selected haplotype group.
 								</div>
 								<div class="row">
 									<div id="elmHaplotypeGroupsOverviewTable" style="height: 1px;width: 1px;" class="ag-theme-balham mt-3 col-6"></div>
