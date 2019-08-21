@@ -246,7 +246,7 @@
 				<div class="row">
 					<h2>Haplotype Groups</h2>
 					<p class="lead">
-						Lorem ipsum dolor sit amet, his albucius gubergren ea. At mea dignissim appellantur. Semper senserit postulant est eu, ut per habeo corrumpit. Sed ea feugait complectitur, quo graece principes eu, enim bonorum ad usu.
+						To determine haplotypes, SNP allele results are analyzed for each cultivar. Cultivars with matching SNP values are compiled together as a haplotype group.
 					</p>
 				</div>
 				<div class="row">
@@ -352,7 +352,7 @@
 							</div>
 							<div id="elmHaplotypeGroupsResultsContainer">
 								<div id="elmHaplotypeGroupsResultsText">
-									Lorem ipsum dolor sit amet, his albucius gubergren ea. At mea dignissim appellantur. Semper senserit postulant est eu, ut per habeo corrumpit. Sed ea feugait complectitur, quo graece principes eu, enim bonorum ad usu.
+									To view details about a haplotype group, select the group from the table below. Cultivars that share this haplotype will then be displayed in the table to the right. The SNP allele values will also appear next to the list of cultivars within the sleected haplotype group.
 								</div>
 								<div class="row">
 									<div id="elmHaplotypeGroupsOverviewTable" style="height: 1px;width: 1px;" class="ag-theme-balham mt-3 col-6"></div>
@@ -497,7 +497,7 @@
 				new agGrid.Grid(elmHaplotypeGroupsCultivarsTable, objHaplotypeGroupsCultivarsTableGridOptions);
 
 				var elmHaplotypeGroupsAllelesTable = document.querySelector('#elmHaplotypeGroupsAllelesTable');
-				elmHaplotypeGroupsAllelesTable.innerHTML = "<p>Group "+(inc_key+1)+" SNP Alleles</p><p>"+arrHaplotypeGroups[inc_key].haplotype+"</p>";
+				elmHaplotypeGroupsAllelesTable.innerHTML = "<p>Group "+(inc_key+1)+" SNP Alleles</p><hr /><p>"+arrHaplotypeGroups[inc_key].haplotype+"</p>";
 
 			}
 
