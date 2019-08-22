@@ -106,7 +106,6 @@
 	}
 	if(!$objCollection->selected->structure->ready){
 		$objCollection->assemblies[$objCollection->selected->assembly->index]["structures"][0]["option_selected"] = " selected";
-		$objCollection->selected->structure->ready = true;
 		$objCollection->selected->structure->index = 0;
 		$objCollection->selected->structure->id = $objCollection->assemblies[$objCollection->selected->assembly->index]["structures"][0]["id"];
 	}
@@ -116,16 +115,8 @@
 	//****************************************************************************************************************
 	//	^--- PHP -- 1I - START of determining the selected (or default) start position
 	//****************************************************************************************************************
-	if($objCollection->selected->start->position > 0){
-		if($objCollection->selected->start->position < $objCollection->assemblies[$objCollection->selected->assembly->index]["structures"][$objCollection->selected->structure->index]["sequence_length"]){
-			//$objCollection->selected->start->ready = true;
-		}else{
-			$objCollection->selected->start->position = 1;
-			//$objCollection->selected->start->ready = true;
-		}
-	}else{
+	if(($objCollection->selected->start->position < 1) || ($objCollection->selected->start->position > $objCollection->assemblies[$objCollection->selected->assembly->index]["structures"][$objCollection->selected->structure->index]["sequence_length"])){
 		$objCollection->selected->start->position = 1;
-		//$objCollection->selected->start->ready = true;
 	}
 	//****************************************************************************************************************
 	//	v--- PHP -- 1I - END of determining the selected (or default) start position
@@ -133,11 +124,8 @@
 	//****************************************************************************************************************
 	//	^--- PHP -- 1J - START of determining the selected (or default) stop position
 	//****************************************************************************************************************
-	if(($objCollection->selected->stop->position > 0) && ($objCollection->selected->stop->position >= $objCollection->selected->start->position) && ($objCollection->selected->stop->position <= $objCollection->assemblies[$objCollection->selected->assembly->index]["structures"][$objCollection->selected->structure->index]["sequence_length"])){
-		//$objCollection->selected->stop->ready = true;
-	}else{
+	if(($objCollection->selected->stop->position < $objCollection->selected->start->position) || ($objCollection->selected->stop->position > $objCollection->assemblies[$objCollection->selected->assembly->index]["structures"][$objCollection->selected->structure->index]["sequence_length"])){
 		$objCollection->selected->stop->position = $objCollection->assemblies[$objCollection->selected->assembly->index]["structures"][$objCollection->selected->structure->index]["sequence_length"];
-		//$objCollection->selected->stop->ready = true;
 	}
 	//****************************************************************************************************************
 	//	v--- PHP -- 1J - END of determining the selected (or default) stop position
