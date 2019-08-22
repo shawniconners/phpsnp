@@ -88,8 +88,8 @@
 	//****************************************************************************************************************
 	//	^--- PHP -- 1G - START of determing the snp window for this analysis
 	//****************************************************************************************************************
-	if($objAssembly->study->snp_count > 100){
-		$objAssembly->study->snp_window = 100;
+	if($objAssembly->study->snp_count > $objSettings->haplotype_max){
+		$objAssembly->study->snp_window = $objSettings->haplotype_max;
 	}else{
 		$objAssembly->study->snp_window = $objAssembly->study->snp_count;
 	}
@@ -315,7 +315,7 @@
 								if($objAssembly->study->snp_count > $objAssembly->study->snp_window){
 									?>
 									<div class="alert alert-warning mb-0 mt-3" role="alert">
-										The region you selected for this study contains over 100 SNPs. To create the analysis that appears below we have limited the result set to the first 100 SNPs. The results below should not be considered accurate for the currently selected region. You may want to go back to the browse page and select a smaller region.
+										The region you selected for this study contains over <?php echo $objSettings->haplotype_max; ?> SNPs. To create the analysis that appears below we have limited the result set to the first 100 SNPs. The results below should not be considered accurate for the currently selected region. You may want to go back to the browse page and select a smaller region.
 									</div>
 									<?php
 								}
