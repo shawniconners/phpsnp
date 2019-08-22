@@ -7,7 +7,7 @@
 	//	v--- PHP -- 1A - END of startup
 	//****************************************************************************************************************
 	//****************************************************************************************************************
-	//	^--- PHP -- 1B - START of receiving the base cultivar and similarity reults
+	//	^--- PHP -- 1B - START of receiving the study name, number of snps, base cultivar and similarity reults
 	//****************************************************************************************************************
 	$objRequest = new stdClass();
 	$objRequest->study = filter_input(INPUT_POST, "elmCultivarSimilarityStudy", FILTER_SANITIZE_STRING);
@@ -15,7 +15,7 @@
 	$objRequest->cultivar = filter_input(INPUT_POST, "elmCultivarSimilarityBaseCultivar", FILTER_SANITIZE_STRING);
 	$objRequest->results = filter_input(INPUT_POST, "elmCultivarSimilarityResults", FILTER_UNSAFE_RAW);
 	//****************************************************************************************************************
-	//	v--- PHP -- 1B - END of receiving the base cultivar and similarity reults
+	//	v--- PHP -- 1B - END  of receiving the study name, number of snps, base cultivar and similarity reults
 	//****************************************************************************************************************
 	//****************************************************************************************************************
 	//	^--- PHP -- 1C - START of preparing the results
@@ -27,8 +27,6 @@
 	$objCultivar->results = json_decode($objRequest->results, true);
 	$objCultivar->download = new stdClass();
 	$objCultivar->download->name = $objCultivar->study."_".$objCultivar->cultivar."_similarity.tsv";
-	//echo $objCultivar->snps;
-	//exit;
 	$objCultivar->download->content = "Cultivar\tMatching SNPs (Max. ".$objCultivar->snps.")".PHP_EOL;
 	foreach ($objCultivar->results as $arrCultivar) {
 		$objCultivar->download->content .= $arrCultivar["name"]."\t".$arrCultivar["similarity"].PHP_EOL;
