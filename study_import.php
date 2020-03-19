@@ -135,7 +135,7 @@
 	      	<div class="container">
 		        <div class="row">
 					<h2>Study - VCF to Database Import</h2>
-					<p class="lead">Your VCF field identification settings have been saved to the database. The SNPs within your study are now being imported into the database. SNPs are also being compared against the assigned assembly to ensure reference values are accurate.</p>
+					<p class="lead">Database tables have been created to store SNPs from your uploaded study. The SNPs within your study are now being imported into the database. SNPs are also being compared against the assigned assembly to ensure reference values are accurate.</p>
 		  		</div>
 				<div class="row mt-2 mb-4">
 					<ul class="step d-flex flex-nowrap">
@@ -149,7 +149,7 @@
 							<span class="">Step 3<br />Structure Tables Creation</span>
 						</li>
 						<li class="step-item active">
-							<span class="">Step 4<br />Databae Import</span>
+							<span class="">Step 4<br />Database Import</span>
 						</li>
 						<li class="step-item">
 							<span class="">Step 5<br />Cleaning Up</span>

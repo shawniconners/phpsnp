@@ -94,7 +94,7 @@
 							<span class="">Step 3<br />Structure Tables Creation</span>
 						</li>
 						<li class="step-item">
-							<span class="">Step 4<br />Databae Import</span>
+							<span class="">Step 4<br />Database Import</span>
 						</li>
 						<li class="step-item">
 							<span class="">Step 5<br />Cleaning Up</span>
