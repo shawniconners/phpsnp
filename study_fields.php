@@ -161,6 +161,9 @@
 						<li class="step-item">
 							<span class="">Step 5<br />Cleaning Up</span>
 						</li>
+						<li class="step-item">
+							<span class="">Step 6<br />Cultivar Similarity Analysis</span>
+						</li>
 					</ul>
 				</div>
 				<div class="row">

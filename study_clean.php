@@ -124,7 +124,7 @@
 				}else{
 					funConsoleLog("All requests completed.");
 					elmStudyCleanProgressPercent.innerHTML = "100% Complete. Redirecting..."
-					window.location.href = "assembly.php?assembly_id=<?php echo $objStudy->assembly_id; ?>";
+					window.location.href = "study_similarity.php?id=<?php echo $objStudy->id; ?>";
 				}
 				funConsoleLog("Loop has finished.");
 			}
@@ -163,6 +163,9 @@
 						</li>
 						<li class="step-item active">
 							<span class="">Step 5<br />Cleaning Up</span>
+						</li>
+						<li class="step-item">
+							<span class="">Step 6<br />Cultivar Similarity Analysis</span>
 						</li>
 					</ul>
 				</div>
