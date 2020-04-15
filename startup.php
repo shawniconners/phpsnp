@@ -35,9 +35,21 @@
 		return $inc_structure_name;
 	}
 	function funReadableFilesize($inc_bytes) {
-    	$arrSizeSuffixes = array('B','kB','MB','GB','TB','PB');
-    	$intSizeFactor = floor((strlen($inc_bytes) - 1) / 3);
-    	return sprintf("%.2f", $inc_bytes / pow(1024, $intSizeFactor))." ".$arrSizeSuffixes[$intSizeFactor];
+    		$arrSizeSuffixes = array('B','kB','MB','GB','TB','PB');
+    		$intSizeFactor = floor((strlen($inc_bytes) - 1) / 3);
+    		return sprintf("%.2f", $inc_bytes / pow(1024, $intSizeFactor))." ".$arrSizeSuffixes[$intSizeFactor];
+	}
+	function funSignificantFigures($inc_value, $inc_digits){
+	    if ($inc_value == 0) {
+	        $intDecimalPlaces = $inc_digits - 1;
+	    } elseif ($inc_value < 0) {
+	        $intDecimalPlaces = $inc_digits - floor(log10($inc_value * -1)) - 1;
+	    } else {
+	        $intDecimalPlaces = $inc_digits - floor(log10($inc_value)) - 1;
+	    }
+	    $fltResult = ($intDecimalPlaces > 0) ?
+	        number_format($inc_value, $intDecimalPlaces) : round($inc_value, $intDecimalPlaces);
+	    return $fltResult;
 	}
 	//****************************************************************************************************************
 	//	^--- PHP -- 1C - END of shared functions
