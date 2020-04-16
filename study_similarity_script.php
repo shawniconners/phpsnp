@@ -44,68 +44,69 @@
 	$objSimilarityJobResult = new stdClass();
 	$objSimilarityJobResult->similarity_job_id = $objSimilarityJob->id;
 	$objSimilarityJobResult->cultivar_key = $objSimilarityJob->requested_cultivar_key;
+	$objSimilarityJobResult->total_snps = 0;
+	$objSimilarityJobResult->sql_fields = [];
+	$objSimilarityJobResult->sql_fields_text = "";
 	$objSimilarityJobResult->results = [];
+	$objSimilarityJobResult->results = array_fill(0, count($objSimilarityJob->cultivars), 0);
 	//****************************************************************************************************************
 	//	v--- PHP -- 1D - END of preparing the similarity job result
 	//****************************************************************************************************************
 	//****************************************************************************************************************
-	//	^--- PHP -- 1E - START of looping through the similarity job cultivars
+	//	^--- PHP -- 1E - START of perparing the sql statement to retrieve only the relevant json array items
 	//****************************************************************************************************************
-	foreach($objSimilarityJob->cultivars as $intCultivarKey){
-		if($objSimilarityJobResult->cultivar_key <= $intCultivarKey){
-			array_push($objSimilarityJobResult->results, null);
-		}else{
+	foreach($objSimilarityJob->cultivars as $intComparisonCultivarKey){
+		if($objSimilarityJobResult->cultivar_key >= $intComparisonCultivarKey){
+			array_push($objSimilarityJobResult->sql_fields, "JSON_UNQUOTE(JSON_EXTRACT(results, '$[".$intComparisonCultivarKey."]')) AS c_".$intComparisonCultivarKey);
+		}
+	}
+	$objSimilarityJobResult->sql_fields_text = implode(", ", $objSimilarityJobResult->sql_fields);
+	unset($objSimilarityJobResult->sql_fields);
 
-
-			//****************************************************************************************************************
-			//	^--- PHP -- 3A - START of preparing the cultivar score
-			//****************************************************************************************************************
-			$objSimilarityJobCultivarScore = new stdClass();
-			$objSimilarityJobCultivarScore->total_snps = 0;
-			$objSimilarityJobCultivarScore->matching_snps = 0;
-			//array_push($objSimilarityJobResult->results, .222);
-			//****************************************************************************************************************
-			//	v--- PHP -- 3A - END of preparing the cultivar score
-			//****************************************************************************************************************
-
-
-			//****************************************************************************************************************
-			//	^--- PHP -- 3B - START of looping through each sequence and finding matching snps for these two cultivars
-			//****************************************************************************************************************
-			foreach($objSimilarityJob->sequences as $objSequence){
-				$objSimilarityJobCultivarScore->sql = "SELECT JSON_UNQUOTE(JSON_EXTRACT(results, '$[".$objSimilarityJobResult->cultivar_key."]')) AS base_cultivar, JSON_UNQUOTE(JSON_EXTRACT(results, '$[".$intCultivarKey."]')) AS comparison_cultivar FROM tblStudy".$objSimilarityJob->study_id."Structure".$objSequence->id."SNPs WHERE position >= :start AND position <= :stop";
-				$objSimilarityJobCultivarScore->prepare = $objSettings->database->connection->prepare($objSimilarityJobCultivarScore->sql);
-				$objSimilarityJobCultivarScore->prepare->bindValue(':start', $objSequence->start, PDO::PARAM_INT);
-				$objSimilarityJobCultivarScore->prepare->bindValue(':stop', $objSequence->stop, PDO::PARAM_INT);
-				$objSimilarityJobCultivarScore->prepare->execute();
-				$objSimilarityJobCultivarScore->snps = $objSimilarityJobCultivarScore->prepare->fetchAll(PDO::FETCH_ASSOC);
-				$objSimilarityJobCultivarScore->total_snps += count($objSimilarityJobCultivarScore->snps);
-				foreach($objSimilarityJobCultivarScore->snps as $arrSNP){
-					if(strcmp($arrSNP["base_cultivar"], $arrSNP["comparison_cultivar"]) === 0){
-						$objSimilarityJobCultivarScore->matching_snps += 1;
+	//****************************************************************************************************************
+	//	v--- PHP -- 1E - END of perparing the sql statement to retrieve only the relevant json array items
+	//****************************************************************************************************************
+	//****************************************************************************************************************
+	//	^--- PHP -- 1F - START of looping through each sequence and finding matching snps for all cultivars
+	//****************************************************************************************************************
+	foreach($objSimilarityJob->sequences as $objSequence){
+		$objSimilarityJobResult->sql = "SELECT ".$objSimilarityJobResult->sql_fields_text." FROM tblStudy".$objSimilarityJob->study_id."Structure".$objSequence->id."SNPs WHERE position >= :start AND position <= :stop";
+		$objSimilarityJobResult->prepare = $objSettings->database->connection->prepare($objSimilarityJobResult->sql);
+		$objSimilarityJobResult->prepare->bindValue(':start', $objSequence->start, PDO::PARAM_INT);
+		$objSimilarityJobResult->prepare->bindValue(':stop', $objSequence->stop, PDO::PARAM_INT);
+		$objSimilarityJobResult->prepare->execute();
+		$objSimilarityJobResult->snps = $objSimilarityJobResult->prepare->fetchAll(PDO::FETCH_ASSOC);
+		$objSimilarityJobResult->total_snps += count($objSimilarityJobResult->snps);
+		foreach($objSimilarityJobResult->snps as $arrSNP){
+			foreach($objSimilarityJob->cultivars as $intComparisonCultivarKey){
+				if($objSimilarityJobResult->cultivar_key > $intComparisonCultivarKey){
+					if(strcmp($arrSNP["c_".$objSimilarityJobResult->cultivar_key], $arrSNP["c_".$intComparisonCultivarKey]) === 0){
+						$objSimilarityJobResult->results[$intComparisonCultivarKey] += 1;
 					}
 				}
 			}
-			//****************************************************************************************************************
-			//	v--- PHP -- 3B - END of looping through each sequence and finding matching snps for these two cultivars
-			//****************************************************************************************************************
-
-			//****************************************************************************************************************
-			//	^--- PHP -- 3C - START of finalizing the similarity for these two cultivars
-			//****************************************************************************************************************
-			$objSimilarityJobCultivarScore->score = $objSimilarityJobCultivarScore->matching_snps / $objSimilarityJobCultivarScore->total_snps;
-			array_push($objSimilarityJobResult->results, $objSimilarityJobCultivarScore->score);
-			//****************************************************************************************************************
-			//	v--- PHP -- 3C - END of finalizing the similarity for these two cultivars
-			//****************************************************************************************************************
-
 		}
 	}
 	//****************************************************************************************************************
-	//	v--- PHP -- 1E - END of looping through the similarity job cultivars
+	//	v--- PHP -- 1F - END of looping through each sequence and finding matching snps for these two cultivars
 	//****************************************************************************************************************
 	//****************************************************************************************************************
-	//	^--- PHP -- 1F - START of adding similarity job results to database
+	//	^--- PHP -- 1G - START of looping through and correcting all scores
+	//****************************************************************************************************************
+	foreach($objSimilarityJob->cultivars as $intComparisonCultivarKey){
+		if($objSimilarityJobResult->cultivar_key > $intComparisonCultivarKey){
+			// this is a score that should have been found
+			$objSimilarityJobResult->results[$intComparisonCultivarKey] = $objSimilarityJobResult->results[$intComparisonCultivarKey] / $objSimilarityJobResult->total_snps;
+		}else{
+			// this is a score that should not have been calculated
+			$objSimilarityJobResult->results[$intComparisonCultivarKey] = null;
+		}
+	}
+	//****************************************************************************************************************
+	//	v--- PHP -- 1G - END of looping through and correcting all scores
+	//****************************************************************************************************************
+	//****************************************************************************************************************
+	//	^--- PHP -- 1H - START of adding similarity job results to database
 	//****************************************************************************************************************
 	$objSimilarityJobResult->sql = "INSERT INTO tblSimilarityJobResults (similarity_job_id, cultivar_key, results) VALUES (:similarity_job_id, :cultivar_key, :results);";
 	$objSimilarityJobResult->prepare = $objSettings->database->connection->prepare($objSimilarityJobResult->sql);
@@ -116,7 +117,7 @@
 	unset($objSimilarityJob->prepare);
 	unset($objSimilarityJob->sql);
 	//****************************************************************************************************************
-	//	v--- PHP -- 1F - END of adding similarity job results to database
+	//	v--- PHP -- 1H - END of adding similarity job results to database
 	//****************************************************************************************************************
 
 
